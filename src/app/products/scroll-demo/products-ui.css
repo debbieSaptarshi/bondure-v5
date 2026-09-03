@@ -273,14 +273,16 @@ color: var(--products-muted);
 /* Apple-style product cards (centered, airy, rounded media) */
 .products-page .product-catalog__grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.65rem, 3vw, 0.85rem);
+  row-gap: clamp(1.1rem, 4vw, 1.5rem);
 }
 
 @media (min-width: 640px) {
   .products-page .product-catalog__grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 1.75rem;
+    row-gap: 2rem;
   }
 }
 
@@ -927,4 +929,68 @@ color: var(--products-muted);
 .products-page .product-card__badge,
 .products-page .product-card__swatches {
   display: none;
+}
+
+@media (max-width: 639px) {
+  .products-page .product-catalog__toolbar {
+    margin-bottom: 0.85rem;
+  }
+
+  .products-page .product-catalog__count {
+    font-size: 0.78rem;
+  }
+
+  .products-page .product-card__stage {
+    aspect-ratio: 4 / 5;
+    margin-bottom: 0.55rem;
+  }
+
+  .products-page .product-card__photo {
+    width: 92%;
+    height: 92%;
+    max-width: 92%;
+    max-height: 92%;
+  }
+
+  .products-page .product-card__collection-category {
+    margin-bottom: 0.2rem;
+    font-size: clamp(0.58rem, 2.4vw, 0.68rem);
+  }
+
+  .products-page .product-card__title {
+    min-height: 2.35em;
+    margin-bottom: 0.2rem;
+    font-size: clamp(0.72rem, 3.1vw, 0.84rem);
+    line-height: 1.2;
+  }
+
+  .products-page .product-card__desc {
+    min-height: 2.5em;
+    margin-bottom: 0.15rem;
+    -webkit-line-clamp: 2;
+    font-size: clamp(0.62rem, 2.6vw, 0.72rem);
+    line-height: 1.35;
+  }
+
+  .products-page .product-card__standards {
+    gap: 0.25rem;
+    min-height: 0;
+    margin-top: 0.3rem;
+  }
+
+  .products-page .product-card__standards span {
+    min-height: 1.3rem;
+    padding: 0.12rem 0.38rem;
+    font-size: 0.54rem;
+  }
+
+  .products-page .product-card__actions {
+    margin-top: 0.5rem;
+  }
+
+  .products-page .product-card__cta::part(base) {
+    min-height: 1.9rem;
+    padding-inline: 0.7rem;
+    font-size: 0.6rem;
+  }
 }

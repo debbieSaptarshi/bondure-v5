@@ -18,7 +18,20 @@
 .services-network-node p { color: var(--base-200); line-height: 1.05; }
 .node-1 { top: 0; left: 9%; }.node-2 { top: 0; right: 9%; }.node-3 { bottom: 0; left: 9%; }.node-4 { right: 9%; bottom: 0; }
 
-.service-pillars { position: relative; z-index: 2; margin-top: -8svh; padding: 18svh 0 14svh; background: var(--base-500); }
+.service-pillars {
+  position: relative;
+  z-index: 2;
+  margin-top: -12svh;
+  padding: 16svh 0 14svh;
+  background:
+    linear-gradient(
+      180deg,
+      transparent 0%,
+      color-mix(in srgb, var(--base-500) 35%, transparent) 10%,
+      var(--base-500) 22%,
+      var(--base-500) 100%
+    );
+}
 .service-pillars-heading { padding-bottom: 5rem; }
 .service-pillars-heading p { color: var(--base-350); }
 .service-pillars-heading h2 {
@@ -64,7 +77,45 @@
   .services-hero { min-height: 110svh; padding: 20svh 1rem 5svh; }.services-hero-copy { width: 100%; }.services-hero-copy h1 { font-size: clamp(3rem, 15vw, 5.5rem); }
   .services-network { height: 31rem; margin-top: 4rem; }.services-network-lines { display: none; }.services-network-core { width: 8rem; height: 8rem; }
   .services-network-node { width: 8rem; }.services-network-node svg { width: 5.5rem; }.node-1,.node-3 { left: 0; }.node-2,.node-4 { right: 0; }
-  .service-pillars-heading,.service-pillars-list { grid-template-columns: 1fr; }.service-pillar { min-height: 29rem; }.service-pillar-visual { height: 14rem; }
+  .service-pillars-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(0.65rem, 3vw, 0.85rem);
+  }
+
+  .service-pillar {
+    min-height: 0;
+    padding: clamp(0.75rem, 3vw, 1rem);
+    border-radius: clamp(0.85rem, 3.5vw, 1rem);
+  }
+
+  .service-pillar-visual {
+    height: clamp(5.25rem, 22vw, 6.75rem);
+  }
+
+  .service-pillar-visual svg,
+  .service-pillar-visual img {
+    width: min(100%, clamp(4.5rem, 20vw, 6rem));
+  }
+
+  .service-pillar-visual .service-pillar-art,
+  .service-pillar-visual .service-pillar-art--call,
+  .service-pillar-visual .service-pillar-art--quality,
+  .service-pillar-visual .service-pillar-art--training {
+    width: min(100%, clamp(4.5rem, 20vw, 6rem));
+  }
+
+  .service-pillar h3 {
+    min-height: 0;
+    margin-bottom: 0.45rem;
+    font-size: clamp(0.82rem, 3.4vw, 0.95rem);
+    line-height: 1.15;
+  }
+
+  .service-pillar > p {
+    max-width: none;
+    font-size: clamp(0.66rem, 2.8vw, 0.76rem);
+    line-height: 1.4;
+  }
 }
 
 @media (max-width: 1250px) and (min-width: 801px) {

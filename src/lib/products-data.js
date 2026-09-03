@@ -551,10 +551,10 @@ const DEMO_VIDEO = {
 
 const SECONDARY_VIEW_BY_CATEGORY = {
   "aac-joining": "/home-media/aac-blocks.webp",
-  "tile-adhesive": "/spotlight/spotlight-img-1.png",
+  "tile-adhesive": "/spotlight/tile-adhesive-application.png",
   grout: "/home-media/adhesive-work-2.webp",
   "floor-screed": "/home-media/materials-research-lab.webp",
-  plaster: "/home-media/mortar-application.png",
+  plaster: "/home-media/construction-mortar-application.png",
   "tile-cleaner": "/home-media/site-testing.webp",
 };
 

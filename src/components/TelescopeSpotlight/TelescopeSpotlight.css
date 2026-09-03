@@ -134,6 +134,7 @@
 
 .telescope-spotlight-image {
   position: absolute;
+  right: clamp(1.5rem, 4vw, 4.5rem);
   width: clamp(220px, 22vw, 320px);
   height: clamp(165px, 16.5vw, 240px);
   overflow: hidden;
@@ -163,15 +164,90 @@
   transform: translateY(-50%);
 }
 
-@media (max-width: 800px) {
-  .telescope-spotlight-title-frame { left: 4vw; clip-path: none; }
+@media (max-width: 1000px) {
+  .telescope-spotlight {
+    height: 100svh;
+    min-height: 100svh;
+    padding: 1rem;
+  }
+
+  .telescope-spotlight-intro,
   .telescope-spotlight-title-frame::before,
-  .telescope-spotlight-title-frame::after,
-  .telescope-spotlight-header { display: none; }
-  .telescope-spotlight-titles { left: 5%; width: 90%; gap: 3rem; }
-  .telescope-spotlight-title { font-size: clamp(2rem, 10vw, 3.5rem); }
-  .telescope-spotlight-images { right: -6rem; }
-  .telescope-spotlight-image { width: clamp(180px, 42vw, 240px); height: clamp(135px, 31vw, 180px); }
+  .telescope-spotlight-title-frame::after {
+    display: none;
+  }
+
+  .telescope-spotlight-images {
+    inset: 1rem;
+    z-index: 3;
+    width: auto;
+    min-width: 0;
+  }
+
+  .telescope-spotlight-image {
+    top: 50%;
+    left: auto;
+    right: 0.35rem;
+    width: clamp(148px, 44vw, 205px);
+    height: clamp(112px, 33vw, 154px);
+    border-radius: .55rem;
+    box-shadow: 0 1rem 2.5rem rgba(0, 0, 0, 0.28);
+    transform: translateY(-50%);
+    transform-origin: center right;
+  }
+
+  .telescope-spotlight-bg {
+    position: absolute;
+    inset: 1rem;
+    transform: scale(1);
+  }
+
+  .telescope-spotlight-bg img {
+    transform: scale(1);
+  }
+
+  .telescope-spotlight-shade {
+    background: linear-gradient(
+      180deg,
+      rgba(248, 245, 239, 0.72) 0%,
+      rgba(248, 245, 239, 0.42) 42%,
+      rgba(248, 245, 239, 0.72) 100%
+    );
+  }
+
+  .telescope-spotlight-title-frame {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    clip-path: none;
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  .telescope-spotlight-titles {
+    left: 0;
+    width: 100%;
+    padding: 0 clamp(1rem, 4vw, 1.5rem);
+    gap: clamp(1.75rem, 5.5vh, 2.5rem);
+    will-change: transform;
+  }
+
+  .telescope-spotlight-title {
+    max-width: min(16ch, 55vw);
+    font-size: clamp(1.2rem, 4.8vw, 1.55rem);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    text-shadow: 0 1px 12px rgba(248, 245, 239, 0.55);
+    transition: opacity 0.25s ease;
+  }
+
+  .telescope-spotlight-header {
+    display: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -196,4 +272,20 @@ html[data-theme="dark"] .telescope-spotlight-intro__shade {
 html[data-theme="dark"] .telescope-spotlight-intro-word {
   color: var(--base-100);
   text-shadow: 0 1px 16px rgba(0, 0, 0, 0.45);
+}
+
+@media (max-width: 1000px) {
+  html[data-theme="dark"] .telescope-spotlight-shade {
+    background: linear-gradient(
+      180deg,
+      rgba(20, 19, 19, 0.78) 0%,
+      rgba(20, 19, 19, 0.42) 42%,
+      rgba(20, 19, 19, 0.78) 100%
+    );
+  }
+
+  html[data-theme="dark"] .telescope-spotlight-title,
+  html[data-theme="dark"] .telescope-spotlight-header {
+    text-shadow: 0 1px 14px rgba(0, 0, 0, 0.55);
+  }
 }

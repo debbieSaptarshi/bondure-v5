@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocale } from "@/components/LocaleProvider/LocaleProvider";
 
 import "./HomePage.css";
@@ -8,12 +8,12 @@ import "./HomePage.css";
 const galleryMedia = [
   {
     id: "concrete-mixer",
-    src: "/home-media/mixingvideo.mp4",
-    poster: "/optimized/home/gallery-lab-formulation.webp",
+    src: "/services/experience-center.webp",
     alt: {
-      en: "Construction site with workers and concrete mixer outdoors",
-      de: "Baustelle mit Arbeitern und Betonmischer im Freien",
+      en: "Bondure material experience center with hands-on application demonstrations",
+      de: "Bondure Material-Erlebniszentrum mit praxisnahen Anwendungsvorführungen",
     },
+    imageOnly: true,
   },
   {
     id: "floor-screed",
@@ -25,13 +25,13 @@ const galleryMedia = [
     imageOnly: true,
   },
   {
-    id: "excavator",
-    src: "/home-media/luss-test.mp4",
-    poster: "/optimized/home/gallery-material-inspection.webp",
+    id: "material-inspection",
+    src: "/home-media/material-inspection.webp",
     alt: {
-      en: "Excavator loading earth into a dump truck at a construction site",
-      de: "Bagger lädt Erde auf einer Baustelle in einen Muldenkipper",
+      en: "Bondure specialist inspecting materials and substrate quality on site",
+      de: "Bondure-Spezialist prüft Material und Untergrundqualität vor Ort",
     },
+    imageOnly: true,
   },
   {
     id: "bondure-tile-installation",
@@ -44,12 +44,12 @@ const galleryMedia = [
   },
   {
     id: "tile-adhesive",
-    src: "/home-media/water-proofing.mp4",
-    poster: "/optimized/home/gallery-tile-installation.webp",
+    src: "/media/product-catalog-tile-adhesive.webp",
     alt: {
-      en: "Tile adhesive being applied with a notched trowel",
-      de: "Fliesenkleber wird mit einer Zahnkelle aufgetragen",
+      en: "Bondure tile adhesive product recommended for project requirements",
+      de: "Bondure Fliesenkleber-Produkt, empfohlen für die Projektanforderungen",
     },
+    imageOnly: true,
   },
   {
     id: "wall-plaster",
@@ -62,12 +62,12 @@ const galleryMedia = [
   },
   {
     id: "aac-blocks",
-    src: "/home-media/aac-block.mp4",
-    poster: "/optimized/home/gallery-aac-joining.webp",
+    src: "/optimized/home/gallery-aac-joining.webp",
     alt: {
       en: "AAC block joining mortar applied on site",
       de: "Auf der Baustelle aufgetragener Porenbeton-Fugenmörtel",
     },
+    imageOnly: true,
   },
   {
     id: "precision-tile",
@@ -80,14 +80,26 @@ const galleryMedia = [
   },
 ];
 
-function GalleryItem({ item }) {
+function restartMarqueeAnimation(node) {
+  if (!node) return;
+
+  const { animationName, animationDuration } = window.getComputedStyle(node);
+  if (animationName === "none" || animationDuration === "0s") return;
+
+  node.style.animation = "none";
+  void node.offsetHeight;
+  node.style.animation = "";
+}
+
+function GalleryItem({ item, loadVideo = true }) {
   const rootRef = useRef(null);
   const videoRef = useRef(null);
   const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   useEffect(() => {
     const root = rootRef.current;
-    if (!root) return;
+    if (!root || !loadVideo || item.imageOnly) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const saveData = navigator.connection?.saveData;
@@ -96,19 +108,55 @@ function GalleryItem({ item }) {
     const observer = new IntersectionObserver(
       ([entry]) => {
         setShouldLoadVideo(entry.isIntersecting);
+
         if (!entry.isIntersecting) {
+          setIsVideoPlaying(false);
           videoRef.current?.pause();
         }
       },
-      { rootMargin: "80px" },
+      { rootMargin: "120px" },
     );
 
     observer.observe(root);
     return () => observer.disconnect();
-  }, []);
+  }, [item.imageOnly, loadVideo]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !shouldLoadVideo) return;
+
+    const handlePlaying = () => setIsVideoPlaying(true);
+    const handlePause = () => setIsVideoPlaying(false);
+
+    const tryPlay = async () => {
+      try {
+        video.muted = true;
+        await video.play();
+      } catch {
+        setIsVideoPlaying(false);
+      }
+    };
+
+    video.addEventListener("playing", handlePlaying);
+    video.addEventListener("pause", handlePause);
+    video.addEventListener("canplay", tryPlay);
+
+    if (video.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
+      void tryPlay();
+    }
+
+    return () => {
+      video.removeEventListener("playing", handlePlaying);
+      video.removeEventListener("pause", handlePause);
+      video.removeEventListener("canplay", tryPlay);
+    };
+  }, [shouldLoadVideo]);
 
   return (
-    <figure className="home-gallery__slide" ref={rootRef}>
+    <figure
+      className={`home-gallery__slide${isVideoPlaying ? " is-video-playing" : ""}`}
+      ref={rootRef}
+    >
       {item.imageOnly ? (
         <img
           className="home-gallery__media home-gallery__poster"
@@ -126,7 +174,7 @@ function GalleryItem({ item }) {
             loading="lazy"
             decoding="async"
           />
-          {shouldLoadVideo ? (
+          {shouldLoadVideo && loadVideo ? (
             <video
               ref={videoRef}
               className="home-gallery__media home-gallery__video"
@@ -135,7 +183,7 @@ function GalleryItem({ item }) {
               muted
               loop
               playsInline
-              preload="none"
+              preload="metadata"
               aria-label={item.alt}
             />
           ) : null}
@@ -147,6 +195,36 @@ function GalleryItem({ item }) {
 
 export default function HomeGallery() {
   const { locale } = useLocale();
+  const marqueeRef = useRef(null);
+
+  const restartMarquee = useCallback(() => {
+    restartMarqueeAnimation(marqueeRef.current);
+  }, []);
+
+  useEffect(() => {
+    restartMarquee();
+
+    const handleReady = () => restartMarquee();
+    const handleVisibility = () => {
+      if (document.visibilityState === "visible") restartMarquee();
+    };
+
+    window.addEventListener("load", handleReady);
+    document.addEventListener("visibilitychange", handleVisibility);
+
+    const marquee = marqueeRef.current;
+    const resizeObserver = marquee
+      ? new ResizeObserver(() => restartMarquee())
+      : null;
+
+    resizeObserver?.observe(marquee);
+
+    return () => {
+      window.removeEventListener("load", handleReady);
+      document.removeEventListener("visibilitychange", handleVisibility);
+      resizeObserver?.disconnect();
+    };
+  }, [restartMarquee]);
 
   return (
     <section
@@ -154,7 +232,7 @@ export default function HomeGallery() {
       aria-label={locale === "de" ? "Bondure Anwendungen auf der Baustelle" : "Bondure applications on site"}
     >
       <div className="home-gallery__viewport">
-        <div className="home-gallery__marquee">
+        <div className="home-gallery__marquee" ref={marqueeRef}>
           {[0, 1].map((setIndex) => (
             <div
               className="home-gallery__track"
@@ -165,6 +243,7 @@ export default function HomeGallery() {
                 <GalleryItem
                   item={{ ...item, alt: item.alt[locale] }}
                   key={`${setIndex}-${item.id}`}
+                  loadVideo={setIndex === 0}
                 />
               ))}
             </div>

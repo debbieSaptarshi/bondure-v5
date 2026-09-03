@@ -24,6 +24,29 @@
 
 .footer .footer-meta .container.footer-socials .footer-meta-col {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.75rem;
+}
+
+.footer-nav a {
+  color: var(--base-100);
+  font: 600 0.82rem/1 var(--font-manrope), sans-serif;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.footer-nav a:hover,
+.footer-nav a:focus-visible {
+  color: var(--primary);
 }
 
 .footer .footer-socials-wrapper {

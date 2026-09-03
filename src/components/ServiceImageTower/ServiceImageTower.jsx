@@ -4,19 +4,10 @@ import "./ServiceImageTower.css";
 
 import { useEffect, useRef, useState } from "react";
 import { useLocale } from "../LocaleProvider/LocaleProvider";
+import { serviceImageTowerSlides } from "@/lib/service-image-tower-data";
+import { telescopeSpotlightMedia } from "@/lib/telescope-spotlight-data";
 
-const images = [
-  "/spotlight/vanServices.webp",
-  "/spotlight/bondurevanFactoryBG.webp",
-  "/spotlight/technicalteamservices.webp",
-  "/spotlight/services2floor.webp",
-  "/spotlight/services3AAC.webp",
-  "/spotlight/tile-installation.webp",
-  "/spotlight/spotlight-img-1.png",
-  "/spotlight/spotlight-img-2.webp",
-  "/spotlight/spotlight-img-10.webp",
-  "/spotlight/02.webp",
-];
+const images = telescopeSpotlightMedia.map((item) => item.image);
 
 const vertexShader = `
   varying vec2 vUv;
@@ -62,31 +53,6 @@ const config = {
   cameraZ: 12,
 };
 
-const serviceStatements = {
-  en: [
-    "Our technical team turns site conditions into clear action.",
-    "Site audits reveal risks before application begins.",
-    "Product recommendations are built around your project.",
-    "After-sales support continues beyond product delivery.",
-    "Practical training builds confidence across every crew.",
-    "Our lab on wheels comes directly to your site.",
-    "Live experiments make product performance fully transparent.",
-    "Side-by-side testing makes every comparison visible.",
-    "Experience centres bring expert guidance closer to every city.",
-  ],
-  de: [
-    "Unser Technik-Team macht aus Baustellenbedingungen klare Maßnahmen.",
-    "Baustellenprüfungen zeigen Risiken vor Beginn der Anwendung auf.",
-    "Produktempfehlungen werden auf Ihr Projekt abgestimmt.",
-    "Unser Kundendienst begleitet Sie über die Produktlieferung hinaus.",
-    "Praxisnahe Schulungen stärken die Sicherheit jedes Teams.",
-    "Unser mobiles Labor kommt direkt zu Ihrer Baustelle.",
-    "Live-Experimente machen die Produktleistung vollständig transparent.",
-    "Direkte Vergleichstests machen jeden Unterschied sichtbar.",
-    "Erlebniszentren bringen fachkundige Beratung näher in jede Stadt.",
-  ],
-};
-
 const ctaLabels = {
   en: "See our experience center",
   de: "Unser Erlebniszentrum ansehen",
@@ -94,16 +60,40 @@ const ctaLabels = {
 
 export default function ServiceImageTower() {
   const { locale } = useLocale();
+  const slides = serviceImageTowerSlides;
   const sectionRef = useRef(null);
   const canvasHostRef = useRef(null);
   const [statementIndex, setStatementIndex] = useState(0);
+  const [webglFailed, setWebglFailed] = useState(false);
+  const [useStaticFallback, setUseStaticFallback] = useState(false);
+
+  useEffect(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const connectionType = navigator.connection?.effectiveType;
+    const constrainedConnection = navigator.connection?.saveData || connectionType === "2g" || connectionType === "slow-2g";
+    const isMobile = window.matchMedia("(max-width: 1000px)").matches;
+    setUseStaticFallback(reducedMotion || constrainedConnection || isMobile);
+  }, []);
+
+  useEffect(() => {
+    slides.forEach((slide) => {
+      const preload = new Image();
+      preload.src = slide.image;
+    });
+  }, [slides]);
 
   useEffect(() => {
     const interval = window.setInterval(() => {
-      setStatementIndex((current) => (current + 1) % serviceStatements.en.length);
+      setStatementIndex((current) => (current + 1) % slides.length);
     }, 5000);
     return () => window.clearInterval(interval);
-  }, []);
+  }, [slides.length]);
+
+  useEffect(() => {
+    const nextIndex = (statementIndex + 1) % slides.length;
+    const preload = new Image();
+    preload.src = slides[nextIndex].image;
+  }, [statementIndex, slides]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -111,8 +101,10 @@ export default function ServiceImageTower() {
     if (!section || !host) return undefined;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const constrainedConnection = navigator.connection?.saveData || navigator.connection?.effectiveType === "2g";
-    if (reducedMotion || constrainedConnection) return undefined;
+    const connectionType = navigator.connection?.effectiveType;
+    const constrainedConnection = navigator.connection?.saveData || connectionType === "2g" || connectionType === "slow-2g";
+    const isMobile = window.matchMedia("(max-width: 1000px)").matches;
+    if (reducedMotion || constrainedConnection || isMobile) return undefined;
 
     let cancelled = false;
     let dispose = () => {};
@@ -309,7 +301,7 @@ export default function ServiceImageTower() {
       if (!entry.isIntersecting || started) return;
       started = true;
       observer.disconnect();
-      initialize().catch(() => {});
+      initialize().catch(() => setWebglFailed(true));
     }, { rootMargin: "200px" });
 
     observer.observe(section);
@@ -321,10 +313,13 @@ export default function ServiceImageTower() {
     };
   }, []);
 
+  const activeSlide = slides[statementIndex];
+  const showFallbackImage = useStaticFallback || webglFailed;
+
   return (
     <section className="service-image-tower" ref={sectionRef}>
       <div className="service-image-tower-heading" aria-live="polite">
-        <p key={statementIndex}>{serviceStatements[locale][statementIndex]}</p>
+        <p key={statementIndex}>{activeSlide.statement[locale]}</p>
         <div className="service-image-tower-loader" aria-hidden="true">
           <span key={statementIndex} />
         </div>
@@ -332,6 +327,14 @@ export default function ServiceImageTower() {
           {ctaLabels[locale]}
         </a>
       </div>
+      <img
+        key={statementIndex}
+        className={`service-image-tower-fallback${showFallbackImage ? " is-visible" : ""}`}
+        src={activeSlide.image}
+        alt={activeSlide.alt[locale]}
+        loading="lazy"
+        decoding="async"
+      />
       <div className="service-image-tower-canvas" ref={canvasHostRef} />
     </section>
   );

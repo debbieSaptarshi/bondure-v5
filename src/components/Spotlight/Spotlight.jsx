@@ -8,7 +8,6 @@ import "./Spotlight.css";
 const experiences = {
   en: [
     {
-      eyebrow: "Mobiles Labor",
       title: "The lab on wheels.",
       description: "Our mobile technical unit brings testing, demonstrations, and direct product comparison into the conditions where your team actually works.",
       points: [
@@ -21,7 +20,6 @@ const experiences = {
       type: "video",
     },
     {
-      eyebrow: "Experience Center",
       title: "Visit our experience center.",
       description: "Visit a Bondure Experience Center in your city to explore full application systems, compare finishes, and discuss project conditions with our technical team.",
       points: [
@@ -37,7 +35,6 @@ const experiences = {
   ],
   de: [
     {
-      eyebrow: "Lab on Wheels",
       title: "Das Labor auf Rädern.",
       description: "Unsere mobile technische Einheit bringt Prüfungen, Vorführungen und direkte Produktvergleiche dorthin, wo Ihr Team tatsächlich arbeitet.",
       points: [
@@ -50,7 +47,6 @@ const experiences = {
       type: "video",
     },
     {
-      eyebrow: "Erlebniszentrum",
       title: "Besuchen Sie unser Erlebniszentrum.",
       description: "Besuchen Sie ein Bondure Erlebniszentrum in Ihrer Stadt, um vollständige Anwendungssysteme zu entdecken, Oberflächen zu vergleichen und Projektbedingungen mit unserem Technik-Team zu besprechen.",
       points: [
@@ -96,7 +92,7 @@ export default function Spotlight() {
         {experiences[locale].map((experience, index) => (
           <article
             className={`spotlight-card${index === 1 ? " spotlight-card--reverse" : ""}`}
-            key={experience.eyebrow}
+            key={experience.title}
           >
             <div className="spotlight-card-media">
               {experience.type === "video" ? (
@@ -117,7 +113,6 @@ export default function Spotlight() {
             </div>
 
             <div className="spotlight-card-content">
-              <p className="spotlight-eyebrow">{experience.eyebrow}</p>
               <h2>{experience.title}</h2>
               <p className="spotlight-description">{experience.description}</p>
               <ul>

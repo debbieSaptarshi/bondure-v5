@@ -1,29 +1,28 @@
 "use client";
 
-import { FaBuilding, FaHospital, FaRoad, FaShip, FaStore, FaUtensils } from "react-icons/fa";
-import CircularGalleryDemo from "@/components/ui/circular-gallery-demo";
-import { useLocale } from "@/components/LocaleProvider/LocaleProvider";
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
 
+import { useLocale } from "@/components/LocaleProvider/LocaleProvider";
+import "@/app/products/scroll-demo/magic-bento.css";
 import "./HomePage.css";
+
+const STATS_GLOW = "89, 22, 24";
 
 const homeCopy = {
   en: {
     statsLabel: "Key figures",
     stats: ["tests performed", "Team members", "Years of innovation", "Continents"],
-    standards: "Excellence through stringent quality standards.",
+    standardsLead: "Excellence",
+    standardsTail: "through stringent quality standards.",
     certificationLogo: "certification logo",
-    solutionsLead: "Solutions",
-    solutionsTail: "for every type of project",
-    solutions: ["Healthcare", "Hospitality", "Infrastructure", "Residential high-rises", "Retail & restaurants", "Marine"],
   },
   de: {
     statsLabel: "Kennzahlen",
     stats: ["durchgeführte Tests", "Teammitglieder", "Jahre Innovation", "Kontinente"],
-    standards: "Exzellenz durch strenge Qualitätsstandards.",
+    standardsLead: "Exzellenz",
+    standardsTail: "durch strenge Qualitätsstandards.",
     certificationLogo: "Zertifizierungslogo",
-    solutionsLead: "Lösungen",
-    solutionsTail: "für jede Art von Projekt",
-    solutions: ["Gesundheitswesen", "Hotellerie", "Infrastruktur", "Wohnhochhäuser", "Einzelhandel & Gastronomie", "Maritimbereich"],
   },
 };
 
@@ -33,8 +32,6 @@ const statValues = [
   ["30+", "/home-media/stat-innovation.svg"],
   ["2", "/home-media/stat-continents.svg"],
 ];
-
-const solutionIcons = [FaHospital, FaUtensils, FaRoad, FaBuilding, FaStore, FaShip];
 
 function StatCardHoverStrokes() {
   return (
@@ -55,15 +52,77 @@ function StatCardHoverStrokes() {
   );
 }
 
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing?.dataset.loaded === "true") {
+      resolve();
+      return;
+    }
+    if (existing) {
+      existing.addEventListener("load", () => resolve(), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = true;
+    script.addEventListener("load", () => {
+      script.dataset.loaded = "true";
+      resolve();
+    }, { once: true });
+    script.addEventListener("error", () => reject(new Error(`Failed to load ${src}`)), { once: true });
+    document.body.appendChild(script);
+  });
+}
+
 export default function HomeStaticSections() {
   const { locale } = useLocale();
   const copy = homeCopy[locale];
+  const statsGridRef = useRef(null);
+  const cleanupRef = useRef(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function initEffects() {
+      window.gsap = gsap;
+      await loadScript("/products-scroll-demo/magic-bento.js");
+      if (cancelled) return;
+
+      const grid = statsGridRef.current;
+      if (!grid) return;
+
+      delete grid.dataset.magicBentoReady;
+      cleanupRef.current?.();
+      cleanupRef.current = window.initMagicBento?.(grid, {
+        cardSelector: ".home-stat-card",
+        glowColor: STATS_GLOW,
+        textAutoHide: false,
+      }) || null;
+    }
+
+    initEffects().catch(console.error);
+
+    return () => {
+      cancelled = true;
+      cleanupRef.current?.();
+      cleanupRef.current = null;
+    };
+  }, []);
 
   return (
     <>
-      <section className="home-stats" aria-label={copy.statsLabel}>
+      <section
+        className="home-stats bento-section"
+        aria-label={copy.statsLabel}
+        style={{
+          "--product-spec-glow": STATS_GLOW,
+          "--product-spec-glow-shadow": "rgba(89, 22, 24, 0.22)",
+        }}
+      >
         <div className="home-stats__inner">
-          <div className="home-stats__grid">
+          <div className="home-stats__grid" ref={statsGridRef}>
             {statValues.map(([value, illustration], index) => {
               const label = copy.stats[index];
               return (
@@ -81,9 +140,11 @@ export default function HomeStaticSections() {
 
       <section className="home-standards" aria-labelledby="standards-title">
         <div className="home-standards__inner">
-          <h2 id="standards-title" className="home-standards__title">
-            {copy.standards}
-          </h2>
+          <div className="home-section-intro">
+            <h2 id="standards-title" className="home-standards__title home-section-heading">
+              <strong>{copy.standardsLead}</strong> {copy.standardsTail}
+            </h2>
+          </div>
           <div className="home-standards__logos">
             <img src="/home-media/en-certification-logo.svg" alt={`EN ${copy.certificationLogo}`} loading="lazy" decoding="async" />
             <img src="/home-media/iso-certification-logo.svg" alt={`ISO ${copy.certificationLogo}`} loading="lazy" decoding="async" />
@@ -91,27 +152,6 @@ export default function HomeStaticSections() {
             <img src="/home-media/certification-logo.svg" alt={`IGBC ${copy.certificationLogo}`} loading="lazy" decoding="async" />
           </div>
         </div>
-      </section>
-
-      <section className="home-solutions" aria-labelledby="solutions-title">
-        <div className="home-solutions__inner">
-          <div className="home-solutions__intro">
-            <h2 id="solutions-title"><strong>{copy.solutionsLead}</strong> {copy.solutionsTail}</h2>
-          </div>
-
-          {/* <div className="home-solutions__grid">
-            {solutionIcons.map((Icon, index) => {
-              const label = copy.solutions[index];
-              return (
-              <article className="home-solutions__item" key={label}>
-                <Icon aria-hidden="true" />
-                <h3>{label}</h3>
-              </article>
-              );
-            })}
-          </div> */}
-        </div>
-        <CircularGalleryDemo />
       </section>
     </>
   );

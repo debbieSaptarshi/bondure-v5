@@ -17,11 +17,21 @@ function ScrollTriggerSync() {
   useEffect(() => {
     const refresh = () => ScrollTrigger.refresh();
     const frame = window.requestAnimationFrame(refresh);
+    let resizeFrame;
+    const scheduleRefresh = () => {
+      window.cancelAnimationFrame(resizeFrame);
+      resizeFrame = window.requestAnimationFrame(refresh);
+    };
 
     window.addEventListener("load", refresh);
+    window.addEventListener("resize", scheduleRefresh, { passive: true });
+    window.addEventListener("orientationchange", scheduleRefresh, { passive: true });
     return () => {
       window.cancelAnimationFrame(frame);
+      window.cancelAnimationFrame(resizeFrame);
       window.removeEventListener("load", refresh);
+      window.removeEventListener("resize", scheduleRefresh);
+      window.removeEventListener("orientationchange", scheduleRefresh);
     };
   }, []);
 

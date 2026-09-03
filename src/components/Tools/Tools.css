@@ -62,8 +62,8 @@
 
 .tools-hub__grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.15rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(0.65rem, 3vw, 1.15rem);
 }
 
 @media (min-width: 720px) {
@@ -168,14 +168,45 @@
   }
 
   .tools-card {
-    min-height: 10.25rem;
-    grid-template-columns: minmax(0, 1fr) 6.5rem;
-    gap: 0 0.75rem;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+    gap: 0.55rem;
+    min-height: 0;
+    padding: clamp(0.75rem, 3vw, 0.95rem);
   }
 
   .tools-card__art {
-    width: 6.5rem;
-    height: 6rem;
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    height: clamp(3.75rem, 16vw, 4.75rem);
+    margin: 0 auto;
+  }
+
+  .tools-card__content {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .tools-card__title {
+    margin-bottom: 0.35rem;
+    font-size: clamp(0.82rem, 3.6vw, 0.95rem);
+    line-height: 1.2;
+  }
+
+  .tools-card__copy {
+    margin-bottom: 0.55rem;
+    font-size: clamp(0.72rem, 3.1vw, 0.8rem);
+    line-height: 1.35;
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .tools-card__cta {
+    font-size: clamp(0.68rem, 2.9vw, 0.74rem);
   }
 }
 

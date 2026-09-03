@@ -5,6 +5,7 @@ import HomeGallery from "@/components/Home/HomeGallery";
 import HomeHero from "@/components/Home/HomeHero";
 import HomeStaticSections from "@/components/Home/HomeStaticSections";
 import HomeStickyScroll from "@/components/Home/HomeStickyScroll";
+import HomeSolutions from "@/components/Home/HomeSolutions";
 import HomeSustainability from "@/components/Home/HomeSustainability";
 
 import "@/components/Home/HomePage.css";
@@ -21,6 +22,7 @@ export default function Home() {
       <HomeGallery />
       <HomeStaticSections />
       <HomeStickyScroll />
+      <HomeSolutions />
       <HomeSustainability />
       <ConditionalFooter />
     </main>

@@ -35,7 +35,7 @@ const images = [
   ["home-media/lab-formulation.png", 1600],
   ["about-story/site-testing.png", 1600],
   ["about-story/foundation-research.png", 1600],
-  ["media/Servicesreviewsite.png", 1600],
+  ["media/services-review-site.png", 1600],
   ["media/tilecleaner.png", 1000],
   ["media/tilefloorproduct.png", 1000],
   ["media/tileproduct.png", 1000],
@@ -48,10 +48,14 @@ const images = [
 ];
 
 const videos = [
+  ["optimized/home/ready-mix-plaster.mp4", 1280],
+  ["optimized/home/readymix for website.mp4", 1600],
   ["services/mobile-technical-unit.mp4", 1600],
   ["home-media/mixingvideo.mp4", 1920],
   ["home-media/magnific_high-quality-video-genera_1lUDE0Rr4r.mp4", 960],
   ["home-media/AACBLOCKDEMO.mp4", 1920],
+  ["home-media/WATER PROOFING 1.mp4", 1600],
+  ["home-media/readymix-plaster.mp4", 1600],
   ["home-media/planogel-video-background-cropped (1).mp4", 960],
   ["home-media/h40-video-background-cropped.mp4", 960],
 ];
@@ -107,5 +111,7 @@ async function optimizeVideo([relativePath, maxWidth]) {
   console.log(`${relativePath} re-encoded`);
 }
 
-for (const image of images) await optimizeImage(image);
+if (!process.argv.includes("--videos-only")) {
+  for (const image of images) await optimizeImage(image);
+}
 for (const video of videos) await optimizeVideo(video);

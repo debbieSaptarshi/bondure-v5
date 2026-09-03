@@ -78,7 +78,7 @@ const supportChannels = [
   {
     id: "sales",
     titleKey: "contactSupportSalesTitle",
-    illustration: "/media/salesillustration.png",
+    illustration: "/media/contact-sales-illustration.png",
     href: "tel:+912266668888",
   },
 ];
@@ -87,7 +87,7 @@ const locations = [
   {
     id: "mumbai-image",
     type: "image",
-    src: "/media/mumbai.jpg",
+    src: "/media/contact-mumbai-office.jpg",
     mapSrc:
       "https://www.openstreetmap.org/export/embed.html?bbox=72.8940%2C19.1080%2C72.9180%2C19.1280&layer=mapnik&marker=19.1180%2C72.9060",
   },
@@ -110,7 +110,7 @@ const locations = [
   {
     id: "frankfurt-image",
     type: "image",
-    src: "/media/germany.jpg",
+    src: "/media/contact-germany-office.jpg",
     mapSrc:
       "https://www.openstreetmap.org/export/embed.html?bbox=8.6680%2C50.1020%2C8.6960%2C50.1200&layer=mapnik&marker=50.1110%2C8.6820",
   },

@@ -15,6 +15,10 @@
   overflow: hidden;
 }
 
+.rd-intro-mobile-hero {
+  display: none;
+}
+
 .rd-intro-gallery {
   position: absolute;
   top: 50%;
@@ -47,6 +51,39 @@
   position: absolute;
   inset: 0;
   background: rgba(20, 19, 19, 0.12);
+}
+
+.rd-intro-item--clear::after {
+  display: none;
+}
+
+.rd-intro-item--clear {
+  background: #0f0f0f;
+  z-index: 1;
+}
+
+.rd-intro-item__frame {
+  position: absolute;
+  inset: 6%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rd-intro-item--clear .rd-intro-item__frame {
+  inset: 0;
+}
+
+.rd-intro-item--clear img,
+.rd-intro-item--clear video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  object-fit: cover;
+  object-position: center;
+  transform: none !important;
 }
 
 .rd-intro-item img,
@@ -134,6 +171,59 @@
   pointer-events: none;
 }
 
+.rd-intro--clear-overlay .rd-intro-header {
+  z-index: 5;
+  color: var(--base-100);
+  pointer-events: none;
+}
+
+.rd-intro--clear-overlay .rd-intro-action {
+  pointer-events: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.95rem 1.75rem;
+  color: #fff;
+  font-family: var(--font-crimson-pro), serif;
+  font-size: clamp(0.95rem, 1.6vw, 1.1rem);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 999px;
+  background: var(--primary);
+  box-shadow: 0 12px 32px rgba(89, 22, 24, 0.28);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.rd-intro--clear-overlay .rd-intro-action__label {
+  display: block;
+  text-wrap: balance;
+}
+
+.rd-intro--clear-overlay .rd-intro-action:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+.rd-intro--clear-overlay .rd-intro-action:focus-visible {
+  outline: 2px solid rgba(255, 255, 255, 0.85);
+  outline-offset: 3px;
+}
+
+.rd-intro--clear-overlay .rd-intro-footer {
+  color: var(--base-100);
+}
+
+.rd-intro--clear-overlay .rd-intro-footer p:not(:last-child)::after {
+  color: rgba(35, 27, 28, 0.35);
+}
+
+.rd-intro--clear-overlay .rd-intro-item__frame {
+  inset: 0;
+}
+
 @media (max-width: 1000px) {
   .rd-intro-logo {
     bottom: 1.25rem;
@@ -151,6 +241,86 @@
   }
 }
 
+@media (max-width: 767px) {
+  .rd-intro-mobile-hero {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: block;
+    overflow: hidden;
+    opacity: 1;
+    pointer-events: none;
+  }
+
+  .rd-intro-mobile-hero video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .rd-intro-gallery {
+    z-index: 0;
+    opacity: 0;
+  }
+
+  .rd-intro-item--clear {
+    z-index: 2;
+  }
+
+  .rd-intro-item__frame {
+    inset: 0;
+  }
+
+  .rd-intro-gallery {
+    gap: 0.4rem;
+    width: calc(168% + 0.4rem);
+    height: calc(205svh + 0.8rem);
+    transform: translate(-50%, -50%);
+    backface-visibility: hidden;
+  }
+
+  .rd-intro-column { gap: 0.4rem; }
+  .rd-intro-column:nth-child(3) { display: none; }
+
+  .rd-intro-item img,
+  .rd-intro-item video {
+    transform: scale(1.1);
+  }
+
+  .rd-intro-logo {
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    left: 1rem;
+    width: clamp(5.75rem, 24vw, 7.25rem);
+  }
+
+  .rd-intro-header {
+    width: min(17.5rem, calc(100% - 2rem));
+    gap: 1rem;
+    padding: 0 0.35rem;
+  }
+
+  .rd-intro--clear-overlay .rd-intro-action {
+    padding: 0.78rem 1.15rem;
+    font-size: clamp(0.8rem, 3.3vw, 0.92rem);
+    box-shadow: 0 8px 22px rgba(89, 22, 24, 0.22);
+  }
+
+  .rd-intro-footer {
+    right: 1rem;
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    gap: 0.3rem;
+    max-width: 44%;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    font-size: 0.62rem;
+    line-height: 1.25;
+    text-align: right;
+  }
+
+  .rd-intro-overlay { background: rgba(20, 19, 19, 0.6); }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .rd-intro-gallery {
     width: 150%;
@@ -160,5 +330,13 @@
 
   .rd-intro-logo {
     transform: none !important;
+  }
+}
+
+@media (max-width: 767px) and (prefers-reduced-motion: reduce) {
+  .rd-intro-gallery {
+    width: 125%;
+    height: 125svh;
+    transform: translate(-50%, -50%) scale(0.8);
   }
 }

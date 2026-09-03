@@ -80,7 +80,7 @@ const copy = {
 };
 
 const cardImages = [
-  "/media/Servicesreviewsite.webp",
+  "/media/how-we-work-site-review.webp",
   "/spotlight/spotlight-img-2.webp",
   "/how-we-work/process-3.webp",
   "/how-we-work/process-4.webp",

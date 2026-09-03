@@ -2,49 +2,57 @@
 
 import "./rd-page.css";
 
-import RDIntro from "@/components/RDIntro/RDIntro";
+import { useRef } from "react";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+import RDHero from "@/components/RDHero/RDHero";
 import CTAWindow from "@/components/CTAWindow/CTAWindow";
 import ConditionalFooter from "@/components/ConditionalFooter/ConditionalFooter";
 import Copy from "@/components/Copy/Copy";
 import { useLocale } from "@/components/LocaleProvider/LocaleProvider";
 
+gsap.registerPlugin(ScrollTrigger);
+
 const copy = {
   en: {
-    intro: {
-      headline: "Research at Bondure",
-      actionLabel: "Explore the process",
-      footerItems: ["Formulate", "Test", "Prove"],
+    hero: {
+      title: "Product science built for real construction conditions",
+      description:
+        "From formulation to field verification, every Bondure system is developed through structured research, controlled testing, and repeatable site evidence.",
+      ctaLabel: "Connect with our technical team to learn more",
+      ctaHref: "/connect",
+      imageAlt: "Bondure R&D process diagram showing on-site application, modified QSPR model, computational tools, automated factories, lab and field validation, and deploy and continuous improve",
     },
     partnershipsHeading: "Research partnerships.",
-    iitbAlt: "Indian Institute of Technology Bombay logo",
-    iitbDescription: "Materials research.",
-    mpaAlt: "Materials Testing Institute University of Stuttgart logo",
-    mpaDescription: "Independent testing.",
+    partnershipsImageAlt: "Bondure research partnerships with IIT Bombay and MPA University of Stuttgart",
     peopleHeading: "One shared standard.",
     peopleDescription: "Research. Application. Verification.",
     researchRoles: [
       {
         title: "Materials research",
         description: "Formulation and chemistry.",
-        image: "/home-media/materials-research-lab.png",
-        alt: "Bonding material powder sample prepared for laboratory analysis",
+        image: "/home-media/rd-materials-research-lab.jpg",
+        alt: "Bonding material powder sample prepared for laboratory analysis in a material testing lab",
       },
       {
         title: "Application engineering",
         description: "Application and substrates.",
-        image: "/home-media/site-testing.webp",
+        image: "/home-media/rd-site-testing.jpg",
         alt: "Technical specialist carrying out a construction-site test",
       },
       {
         title: "Independent verification",
         description: "Repeatable external testing.",
-        image: "/home-media/independent-verification-site.png",
+        image: "/home-media/rd-independent-verification.jpg",
         alt: "Technical team inspecting bonded block samples on a construction site",
       },
     ],
     developmentHeading: "From lab to site.",
     developmentDescription: "Evidence guides every release.",
     developmentAlt: "Engineer reviewing technical work in an industrial setting",
+    developmentStepperLabel: "Research and development process",
     developmentSteps: [
       ["Question", "Define the challenge."],
       ["Small batch", "Compare variations."],
@@ -64,41 +72,42 @@ const copy = {
     ctaHeading: "The science of bonding.",
   },
   de: {
-    intro: {
-      headline: "Forschung bei Bondure",
-      actionLabel: "Prozess entdecken",
-      footerItems: ["Formulieren", "Testen", "Nachweisen"],
+    hero: {
+      title: "Produktwissenschaft für reale Baustellenbedingungen",
+      description:
+        "Von der Formulierung bis zur Baustellenverifizierung wird jedes Bondure-System durch strukturierte Forschung, kontrollierte Tests und reproduzierbare Nachweise entwickelt.",
+      ctaLabel: "Kontaktieren Sie unser Technikteam für mehr Informationen",
+      ctaHref: "/connect",
+      imageAlt: "Bondure F&E-Prozessdiagramm mit Baustellenanwendung, modifiziertem QSPR-Modell, computergestützten Werkzeugen, automatisierten Fabriken, Labor- und Feldvalidierung sowie Einsatz und kontinuierlicher Verbesserung",
     },
     partnershipsHeading: "Forschungspartnerschaften.",
-    iitbAlt: "Logo des Indian Institute of Technology Bombay",
-    iitbDescription: "Materialforschung.",
-    mpaAlt: "Logo der Materialprüfungsanstalt Universität Stuttgart",
-    mpaDescription: "Unabhängige Prüfung.",
+    partnershipsImageAlt: "Bondure Forschungspartnerschaften mit IIT Bombay und der MPA Universität Stuttgart",
     peopleHeading: "Ein gemeinsamer Standard.",
     peopleDescription: "Forschung. Anwendung. Verifizierung.",
     researchRoles: [
       {
         title: "Materialforschung",
         description: "Formulierung und Chemie.",
-        image: "/home-media/materials-research-lab.webp",
-        alt: "Pulverprobe eines Verbindungsmaterials für die Laboranalyse",
+        image: "/home-media/rd-materials-research-lab.jpg",
+        alt: "Pulverprobe eines Verbindungsmaterials in einem Materialprüflabor",
       },
       {
         title: "Anwendungstechnik",
         description: "Anwendung und Untergründe.",
-        image: "/home-media/site-testing.webp",
+        image: "/home-media/rd-site-testing.jpg",
         alt: "Technischer Spezialist bei einer Prüfung auf der Baustelle",
       },
       {
         title: "Unabhängige Verifizierung",
         description: "Reproduzierbare externe Prüfungen.",
-        image: "/home-media/independent-verification-site.webp",
+        image: "/home-media/rd-independent-verification.jpg",
         alt: "Technisches Team prüft verklebte Blockproben auf einer Baustelle",
       },
     ],
     developmentHeading: "Vom Labor zur Baustelle.",
     developmentDescription: "Nachweise leiten jede Freigabe.",
     developmentAlt: "Ingenieur prüft technische Arbeiten in einer industriellen Umgebung",
+    developmentStepperLabel: "Forschungs- und Entwicklungsprozess",
     developmentSteps: [
       ["Fragestellung", "Herausforderung definieren."],
       ["Kleinansatz", "Varianten vergleichen."],
@@ -122,27 +131,57 @@ const copy = {
 export default function RDPage() {
   const { locale } = useLocale();
   const content = copy[locale];
+  const pageRef = useRef(null);
+
+  useGSAP(() => {
+    const media = gsap.matchMedia();
+
+    media.add("(max-width: 767px) and (prefers-reduced-motion: no-preference)", () => {
+      const groups = gsap.utils.toArray(
+        ".rd-people-grid, .rd-development-stepper, .rd-evidence-grid",
+        pageRef.current
+      );
+
+      groups.forEach((group) => {
+        const items = Array.from(group.children);
+        gsap.from(items, {
+          autoAlpha: 0,
+          y: 22,
+          duration: 0.55,
+          stagger: 0.08,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: group,
+            start: "top 88%",
+            once: true,
+          },
+        });
+      });
+    });
+
+    return () => media.revert();
+  }, { scope: pageRef });
 
   return (
-    <>
-      <RDIntro {...content.intro} />
+    <div ref={pageRef}>
+      <RDHero {...content.hero} />
       <main className="rd-page" id="rd-content">
         <section className="rd-network">
           <div className="container">
-            <div className="rd-network-copy">
-              <Copy delay={0.1}>
-                <h2>{content.partnershipsHeading}</h2>
-              </Copy>
-            </div>
-            <div className="rd-partner-grid">
-              <a className="rd-partner" href="https://www.iitb.ac.in/" target="_blank" rel="noreferrer">
-                <div className="rd-partner-logo iitb"><img src="https://www.iitb.ac.in/themes/custom/iitb_bootstrap/logo.png" alt={content.iitbAlt} /></div>
-                <div><h3>IIT Bombay</h3><p>{content.iitbDescription}</p></div>
-              </a>
-              <a className="rd-partner" href="https://www.mpa.uni-stuttgart.de/en/" target="_blank" rel="noreferrer">
-                <div className="rd-partner-logo mpa"><img src="https://www.mpa.uni-stuttgart.de/img/Logo-MPA-lang-mit-Rand-en.svg" alt={content.mpaAlt} /></div>
-                <div><h3>{locale === "de" ? "MPA Universität Stuttgart" : "MPA University of Stuttgart"}</h3><p>{content.mpaDescription}</p></div>
-              </a>
+            <div className="rd-network-layout">
+              <div className="rd-network-copy">
+                <Copy delay={0.1}>
+                  <h2>{content.partnershipsHeading}</h2>
+                </Copy>
+              </div>
+              <figure className="rd-partnerships-visual">
+              <img
+                src="/home-media/rd-research-partnerships.jpg"
+                  alt={content.partnershipsImageAlt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </figure>
             </div>
           </div>
         </section>
@@ -165,22 +204,39 @@ export default function RDPage() {
           </div>
         </section>
 
-        <section className="rd-development">
+        <section className="rd-development" aria-labelledby="rd-development-title">
           <div className="container">
-            <div className="rd-development-heading">
-              <Copy delay={0.1}>
-                <h2>{content.developmentHeading}</h2>
-                <p>{content.developmentDescription}</p>
-              </Copy>
-              <div className="rd-development-image">
-                <img src="/home-media/rd-intro-illustration.svg" alt={content.developmentAlt} />
+            <div className="rd-development-header">
+              <div className="rd-development-intro">
+                <Copy delay={0.1}>
+                  <h2 id="rd-development-title">{content.developmentHeading}</h2>
+                  <p>{content.developmentDescription}</p>
+                </Copy>
               </div>
+
+              <figure className="rd-development-image">
+              <img src="/home-media/rd-intro-illustration.svg" alt={content.developmentAlt} />
+              </figure>
             </div>
-            <div className="rd-development-steps">
-              {content.developmentSteps.map(([title, description]) => (
-                <article key={title}><h3>{title}</h3><p>{description}</p></article>
+
+            <ol className="rd-development-stepper" aria-label={content.developmentStepperLabel}>
+              {content.developmentSteps.map(([title, description], index) => (
+                <li key={title} className="rd-development-stepper__item">
+                  <div className="rd-development-stepper__track" aria-hidden="true">
+                    <span className="rd-development-stepper__marker">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    {index < content.developmentSteps.length - 1 ? (
+                      <span className="rd-development-stepper__line" />
+                    ) : null}
+                  </div>
+                  <div className="rd-development-stepper__content">
+                    <h3>{title}</h3>
+                    <p>{description}</p>
+                  </div>
+                </li>
               ))}
-            </div>
+            </ol>
           </div>
         </section>
 
@@ -205,11 +261,11 @@ export default function RDPage() {
         </section>
 
         <CTAWindow
-          img="/media/bondure-mortar-application.png"
+          img="/media/rd-closing-mortar-application.png"
           header={content.ctaHeading}
         />
       </main>
       <ConditionalFooter />
-    </>
+    </div>
   );
 }

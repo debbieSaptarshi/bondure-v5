@@ -29,6 +29,7 @@ export interface CoverflowCarouselProps {
   gap?: number;
   loop?: boolean;
   showCaption?: boolean;
+  captionPlacement?: "below" | "overlay";
   showPagination?: boolean;
   showNavigation?: boolean;
   label?: string;
@@ -51,6 +52,7 @@ export function CoverflowCarousel({
   gap = 0.05,
   loop = true,
   showCaption = false,
+  captionPlacement = "below",
   showPagination = false,
   showNavigation = false,
   label,
@@ -123,6 +125,7 @@ export function CoverflowCarousel({
       const ramp = Math.pow(distance, falloff);
       const tilt = Math.min(rotate * ramp, 82) * Math.sign(offset);
 
+      card.style.transformOrigin = "center center";
       card.style.transform =
         `translateX(calc(-50% + ${offset * pitch}px)) ` +
         `translateZ(${-depth * width * ramp}px) rotateY(${-tilt}deg)`;
@@ -270,16 +273,18 @@ export function CoverflowCarousel({
             }
           }}
           className={cn(
-            "cursor-grab overflow-hidden py-10 outline-none ring-ring focus-visible:ring-2 active:cursor-grabbing",
+            "coverflow-carousel__frame flex items-center justify-center overflow-hidden outline-none ring-ring focus-visible:ring-2",
             frameClassName,
           )}
           style={{
+            minHeight: "calc(var(--cf-card) + 2.5rem)",
             perspective: `calc(var(--cf-card) * ${perspective})`,
+            perspectiveOrigin: "50% 50%",
             touchAction: "pan-y",
           }}
         >
           <div
-            className="relative select-none"
+            className="coverflow-carousel__stage relative w-full select-none"
             style={{
               height: "var(--cf-card)",
               transformStyle: "preserve-3d",
@@ -294,9 +299,11 @@ export function CoverflowCarousel({
                 role="group"
                 aria-roledescription={text.slide}
                 aria-label={`${index + 1} ${text.of} ${count}`}
+                tabIndex={index === selected ? 0 : -1}
                 className={cn(
-                  "absolute left-1/2 top-0 aspect-square overflow-hidden rounded-2xl bg-muted shadow-xl will-change-transform",
+                  "coverflow-carousel__card absolute left-1/2 top-0 aspect-square overflow-hidden rounded-2xl bg-muted shadow-xl will-change-transform",
                   cardClassName,
+                  index === selected && "is-active",
                 )}
                 style={{ width: "var(--cf-card)" }}
               >
@@ -307,8 +314,25 @@ export function CoverflowCarousel({
                   loading="lazy"
                   decoding="async"
                   draggable={false}
-                  className="h-full w-full select-none object-cover"
+                  className="coverflow-carousel__image block h-full w-full select-none object-cover object-center"
                 />
+                {captionPlacement === "overlay" && showCaption && index === selected && (slide.title || slide.description) ? (
+                  <div className="coverflow-carousel__caption-overlay" aria-hidden="true">
+                    <div className="coverflow-carousel__caption-copy">
+                      {slide.title ? (
+                        <p className="coverflow-carousel__caption-title">{slide.title}</p>
+                      ) : null}
+                      {slide.description ? (
+                        <p className="coverflow-carousel__caption-line">{slide.description}</p>
+                      ) : null}
+                    </div>
+                  </div>
+                ) : null}
+                {captionPlacement === "overlay" && showCaption && index === selected && (slide.title || slide.description) ? (
+                  <span className="sr-only">
+                    {[slide.title, slide.description].filter(Boolean).join(". ")}
+                  </span>
+                ) : null}
               </div>
             ))}
           </div>
@@ -342,7 +366,7 @@ export function CoverflowCarousel({
         )}
       </div>
 
-      {showCaption && active && (active.title || active.description) && (
+      {showCaption && captionPlacement === "below" && active && (active.title || active.description) && (
         <div
           key={selected}
           className={cn(

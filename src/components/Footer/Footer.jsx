@@ -10,11 +10,20 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { RiInstagramLine, RiLinkedinBoxLine, RiYoutubeLine } from "react-icons/ri";
 
 import BondureLogo from "../BondureLogo/BondureLogo";
+import { useLocale } from "@/components/LocaleProvider/LocaleProvider";
+import { useViewTransition } from "@/hooks/useViewTransition";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const FOOTER_LINKS = [
+  { href: "/about", labelKey: "footerAboutUs" },
+  { href: "/connect", labelKey: "footerContactUs" },
+];
+
 const Footer = () => {
   const socialIconsRef = useRef(null);
+  const { t } = useLocale();
+  const { navigateWithTransition } = useViewTransition();
 
   useGSAP(
     () => {
@@ -44,6 +53,20 @@ const Footer = () => {
       <div className="footer-meta">
         <div className="container footer-socials">
           <div className="footer-meta-col">
+            <nav className="footer-nav" aria-label={t("footerNavLabel")}>
+              {FOOTER_LINKS.map((link) => (
+                <a
+                  key={link.href}
+                  href={link.href}
+                  onClick={(event) => {
+                    event.preventDefault();
+                    navigateWithTransition(link.href);
+                  }}
+                >
+                  {t(link.labelKey)}
+                </a>
+              ))}
+            </nav>
             <div className="footer-socials-wrapper" ref={socialIconsRef}>
               <a href="https://www.linkedin.com/company/bondure/" target="_blank" rel="noopener noreferrer">
                 <div className="icon">
@@ -67,7 +90,14 @@ const Footer = () => {
       <div className="footer-outro">
         <div className="container">
           <div className="footer-header">
-            <BondureLogo />
+            <BondureLogo
+              gradientId="footerBondureLogoGradient"
+              gradientStops={[
+                { offset: "0%", stopColor: "#8b5e3c" },
+                { offset: "45%", stopColor: "#591618" },
+                { offset: "100%", stopColor: "#2a0b0c" },
+              ]}
+            />
           </div>
         </div>
       </div>

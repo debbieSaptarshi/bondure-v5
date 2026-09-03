@@ -37,9 +37,17 @@ export default function Copy({ children, animateOnScroll = true, delay = 0 }) {
   useGSAP(
     () => {
       if (!containerRef.current) return;
+      if (
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+        window.matchMedia("(max-width: 1000px)").matches
+      ) {
+        return undefined;
+      }
+      let cancelled = false;
 
       const initializeSplitText = async () => {
         await waitForFonts();
+        if (cancelled) return;
 
         const container = containerRef.current;
         if (!container) return;
@@ -81,6 +89,7 @@ export default function Copy({ children, animateOnScroll = true, delay = 0 }) {
           lines.current.push(...split.lines);
         });
 
+        if (!lines.current.length) return;
         gsap.set(lines.current, { y: "100%" });
 
         const animationProps = {
@@ -103,11 +112,14 @@ export default function Copy({ children, animateOnScroll = true, delay = 0 }) {
         } else {
           gsap.to(lines.current, animationProps);
         }
+
+        requestAnimationFrame(() => ScrollTrigger.refresh());
       };
 
       initializeSplitText();
 
       return () => {
+        cancelled = true;
         splitRefs.current.forEach((split) => {
           if (split) {
             split.revert();

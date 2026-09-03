@@ -15,6 +15,10 @@ export default function HomeStickyScroll() {
   useEffect(() => {
     const sentinel = sentinelRef.current;
     if (!sentinel) return undefined;
+    if (!("IntersectionObserver" in window)) {
+      setShouldRender(true);
+      return undefined;
+    }
 
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -30,7 +34,7 @@ export default function HomeStickyScroll() {
 
   return (
     <div ref={sentinelRef}>
-      {shouldRender ? <StickyScroll /> : <section aria-hidden="true" style={{ minHeight: "100vh" }} />}
+      {shouldRender ? <StickyScroll /> : <section aria-hidden="true" className="sticky-scroll sticky-scroll--loading" style={{ minHeight: "clamp(28rem, 95vw, 36rem)" }} />}
     </div>
   );
 }

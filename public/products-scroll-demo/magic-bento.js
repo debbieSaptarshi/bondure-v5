@@ -391,7 +391,8 @@
   function enhanceCards(grid, config) {
     const section = grid.closest("#adhesive-spec") || grid.closest(".bento-section");
     const glowColor = config.glowColor || resolveGlowColor(section);
-    const cards = grid.querySelectorAll(".spec-card");
+    const cardSelector = config.cardSelector || ".spec-card";
+    const cards = grid.querySelectorAll(cardSelector);
     const cleanups = [];
 
     cards.forEach((card) => {
@@ -498,6 +499,8 @@
       delete grid.dataset.magicBentoReady;
     };
   }
+
+  window.initMagicBento = initMagicBento;
 
   window.initProductsMagicBento = function initProductsMagicBento(options = {}) {
     window.__productsMagicBentoCleanup?.();

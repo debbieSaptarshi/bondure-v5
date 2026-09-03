@@ -655,7 +655,7 @@ html[data-theme="dark"] .top-bar-nav__links a {
   .mobile-bottom-nav__menu-label {
     display: flex;
     align-items: center;
-    padding-left: .55rem;
+    padding: 0 .65rem 0 .55rem;
   }
 
   .mobile-bottom-nav__menu-label svg {

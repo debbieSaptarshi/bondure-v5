@@ -20,6 +20,7 @@ const NAV_ITEMS = [
   { key: "about", href: "/about" },
   { key: "contact", href: "/connect" },
 ];
+const MOBILE_NAV_ITEMS = [{ key: "home", href: "/" }, ...NAV_ITEMS];
 
 const PRODUCT_CATEGORIES = Object.entries(NAV_CATEGORY_LABELS);
 const PRODUCT_CATEGORY_IMAGES = {
@@ -413,7 +414,7 @@ const TopBar = () => {
           <input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={t("search")} aria-label={t("search")} />
         </form>
         <nav className="mobile-nav-sheet__links" aria-label={chromeText.mobilePrimary}>
-          {NAV_ITEMS.map((item) => (
+          {MOBILE_NAV_ITEMS.map((item) => (
             <a
               href={item.href}
               key={item.href}

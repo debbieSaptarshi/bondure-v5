@@ -7,21 +7,11 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLocale } from "../LocaleProvider/LocaleProvider";
+import { telescopeSpotlightMedia } from "@/lib/telescope-spotlight-data";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const itemImages = [
-  "/spotlight/vanServices.webp",
-  "/spotlight/bondurevanFactoryBG.webp",
-  "/spotlight/technicalteamservices.webp",
-  "/spotlight/services2floor.webp",
-  "/spotlight/services3AAC.webp",
-  "/spotlight/tile-installation.webp",
-  "/spotlight/spotlight-img-1.png",
-  "/spotlight/spotlight-img-2.webp",
-  "/spotlight/spotlight-img-10.webp",
-  "/spotlight/02.webp",
-];
+const itemImages = telescopeSpotlightMedia.map((item) => item.image);
 
 const copy = {
   en: {
@@ -67,12 +57,17 @@ const config = { gap: 0.075, speed: 0.3, arcRadius: 500 };
 export default function TelescopeSpotlight() {
   const { locale } = useLocale();
   const content = copy[locale];
-  const items = content.itemNames.map((name, index) => ({ name, image: itemImages[index] }));
+  const items = content.itemNames.map((name, index) => ({
+    name,
+    image: telescopeSpotlightMedia[index]?.image ?? itemImages[index],
+    alt: telescopeSpotlightMedia[index]?.alt?.[locale] ?? content.backgroundAlt,
+  }));
   const sectionRef = useRef(null);
   const backgroundRef = useRef(null);
 
   useGSAP(() => {
     const section = sectionRef.current;
+    if (!section) return undefined;
     const intro = section.querySelector(".telescope-spotlight-intro");
     const background = section.querySelector(".telescope-spotlight-bg");
     const backgroundImage = backgroundRef.current;
@@ -83,25 +78,115 @@ export default function TelescopeSpotlight() {
     const images = gsap.utils.toArray(".telescope-spotlight-image", section);
     const header = section.querySelector(".telescope-spotlight-header");
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const saveData = navigator.connection?.saveData;
+    const isMobile = window.matchMedia("(max-width: 1000px)").matches;
 
-    if (reduceMotion) return;
+    if (reduceMotion || saveData) return undefined;
 
     let activeIndex = 0;
-
     gsap.set(images, { opacity: 0 });
+
+    const syncActiveTitle = () => {
+      const center = window.innerHeight / 2;
+      let closestIndex = 0;
+      let closestDistance = Infinity;
+
+      titles.forEach((title, index) => {
+        const bounds = title.getBoundingClientRect();
+        const distance = Math.abs(bounds.top + bounds.height / 2 - center);
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      });
+
+      if (closestIndex !== activeIndex) {
+        gsap.set(titles[activeIndex], { opacity: 0.25 });
+        gsap.set(titles[closestIndex], { opacity: 1 });
+        backgroundImage.src = items[closestIndex].image;
+        activeIndex = closestIndex;
+      }
+
+      if (isMobile) {
+        const sectionBounds = section.getBoundingClientRect();
+        const sectionCenterY = sectionBounds.height / 2;
+
+        images.forEach((image, index) => {
+          const title = titles[index];
+          const titleBounds = title.getBoundingClientRect();
+          const titleCenterY = titleBounds.top + titleBounds.height / 2 - sectionBounds.top;
+          const inView = titleCenterY > -100 && titleCenterY < sectionBounds.height + 100;
+          const distanceFromCenter = Math.abs(titleCenterY - sectionCenterY);
+          const focus = gsap.utils.clamp(0, 1, 1 - distanceFromCenter / (sectionBounds.height * 0.42));
+          const opacity = inView ? gsap.utils.interpolate(0.3, 1, focus) : 0;
+          const scale = gsap.utils.interpolate(0.86, 1, focus);
+
+          gsap.set(image, {
+            opacity,
+            scale,
+            left: "auto",
+            right: "0.35rem",
+            top: titleCenterY,
+            xPercent: 0,
+            yPercent: -50,
+          });
+        });
+      }
+    };
+
+    const getTitleTrackBounds = () => {
+      const center = window.innerHeight / 2;
+      const firstTitle = titles[0];
+      const lastTitle = titles[titles.length - 1];
+      const firstCenter = firstTitle.offsetTop + firstTitle.offsetHeight / 2;
+      const lastCenter = lastTitle.offsetTop + lastTitle.offsetHeight / 2;
+
+      return {
+        startY: center - firstCenter,
+        endY: center - lastCenter,
+      };
+    };
+
+    if (isMobile) {
+      gsap.set(titleFrame, { opacity: 1, "--line-opacity": 0 });
+      gsap.set(header, { opacity: 1 });
+
+      const positionMobileTitles = (progress) => {
+        const { startY, endY } = getTitleTrackBounds();
+        gsap.set(titleTrack, { y: gsap.utils.interpolate(startY, endY, progress) });
+        syncActiveTitle();
+      };
+
+      ScrollTrigger.create({
+        trigger: section,
+        start: "top top",
+        end: () => `+=${window.innerHeight * 5.5}`,
+        pin: true,
+        pinSpacing: true,
+        scrub: 0.35,
+        invalidateOnRefresh: true,
+        onUpdate: ({ progress }) => positionMobileTitles(progress),
+      });
+
+      requestAnimationFrame(() => {
+        positionMobileTitles(0);
+        ScrollTrigger.refresh();
+      });
+
+      return undefined;
+    }
+
     gsap.set(titleFrame, { opacity: 0, "--line-opacity": 0 });
 
     const getBezierPosition = (progress) => {
-      const width = window.innerWidth * 0.3;
       const height = window.innerHeight;
-      const startX = width - 220;
       const startY = -200;
       const endY = height + 200;
-      const controlX = startX + config.arcRadius;
       const controlY = height / 2;
+      const controlX = -Math.min(config.arcRadius * 0.3, window.innerWidth * 0.1);
 
       return {
-        x: (1 - progress) ** 2 * startX + 2 * (1 - progress) * progress * controlX + progress ** 2 * startX,
+        x: 2 * (1 - progress) * progress * controlX,
         y: (1 - progress) ** 2 * startY + 2 * (1 - progress) * progress * controlY + progress ** 2 * endY,
       };
     };
@@ -119,26 +204,10 @@ export default function TelescopeSpotlight() {
           return;
         }
         const position = getBezierPosition(imageProgress);
-        gsap.set(image, { x: position.x - 100, y: position.y - 75, opacity: 1 });
+        gsap.set(image, { x: position.x, y: position.y - 75, opacity: 1 });
       });
 
-      let closestIndex = 0;
-      let closestDistance = Infinity;
-      titles.forEach((title, index) => {
-        const bounds = title.getBoundingClientRect();
-        const distance = Math.abs(bounds.top + bounds.height / 2 - window.innerHeight / 2);
-        if (distance < closestDistance) {
-          closestDistance = distance;
-          closestIndex = index;
-        }
-      });
-
-      if (closestIndex !== activeIndex) {
-        gsap.set(titles[activeIndex], { opacity: 0.25 });
-        gsap.set(titles[closestIndex], { opacity: 1 });
-        backgroundImage.src = items[closestIndex].image;
-        activeIndex = closestIndex;
-      }
+      syncActiveTitle();
     };
 
     ScrollTrigger.create({
@@ -199,7 +268,7 @@ export default function TelescopeSpotlight() {
       </div>
 
       <div className="telescope-spotlight-bg">
-        <img ref={backgroundRef} src={items[0].image} alt={content.backgroundAlt} />
+        <img ref={backgroundRef} src={items[0].image} alt={items[0].alt} />
         <div className="telescope-spotlight-shade" />
       </div>
 
@@ -213,7 +282,7 @@ export default function TelescopeSpotlight() {
 
       <div className="telescope-spotlight-images" aria-hidden="true">
         {items.map((item) => (
-          <div className="telescope-spotlight-image" key={item.image}><img src={item.image} alt="" /></div>
+          <div className="telescope-spotlight-image" key={item.name}><img src={item.image} alt="" /></div>
         ))}
       </div>
 

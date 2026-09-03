@@ -1,4 +1,16 @@
-const BondureLogo = ({ className = "", gradientId = "bondureLogoGradient", color }) => {
+const DEFAULT_GRADIENT_STOPS = [
+  { offset: "0%", stopColor: "#F2EDE6" },
+  { offset: "45%", stopColor: "#C9A97A" },
+  { offset: "75%", stopColor: "#8A6A3F" },
+  { offset: "100%", stopColor: "#4A3320" },
+];
+
+const BondureLogo = ({
+  className = "",
+  gradientId = "bondureLogoGradient",
+  color,
+  gradientStops = DEFAULT_GRADIENT_STOPS,
+}) => {
   return (
     <svg
       className={className}
@@ -11,10 +23,9 @@ const BondureLogo = ({ className = "", gradientId = "bondureLogoGradient", color
     >
       <defs>
         <linearGradient id={gradientId} x1="0" y1="0" x2="168" y2="23" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#F2EDE6" />
-          <stop offset="45%" stopColor="#C9A97A" />
-          <stop offset="75%" stopColor="#8A6A3F" />
-          <stop offset="100%" stopColor="#4A3320" />
+          {gradientStops.map((stop) => (
+            <stop key={`${gradientId}-${stop.offset}`} offset={stop.offset} stopColor={stop.stopColor} />
+          ))}
         </linearGradient>
         <clipPath id="bondureLogoClip">
           <rect width="168" height="22.6328" fill="white" />

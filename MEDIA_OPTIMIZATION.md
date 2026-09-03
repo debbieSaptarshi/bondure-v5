@@ -29,7 +29,7 @@ unused-assets-review/original-active-media/
 
 ## Videos
 
-Six active MP4 files were re-encoded using H.264:
+All ten MP4 files were re-encoded using H.264:
 
 - CRF 25
 - Slow preset
@@ -37,7 +37,7 @@ Six active MP4 files were re-encoded using H.264:
 - Fast-start metadata for earlier playback
 - Audio removed because every current consumer is muted
 - Carousel-only media capped at 960 px wide
-- Large feature media capped at 1600-1920 px without enlargement
+- Large feature media capped at 1280-1920 px without enlargement
 
 Video URLs were preserved, so existing references and browser behavior remain compatible.
 
@@ -58,6 +58,12 @@ node scripts/optimize-media.mjs
 ```
 
 It uses local development dependencies (`sharp`, `ffmpeg-static`) and preserves originals before generating production files.
+
+To re-encode only video files:
+
+```bash
+node scripts/optimize-media.mjs --videos-only
+```
 
 ## Remaining Review
 

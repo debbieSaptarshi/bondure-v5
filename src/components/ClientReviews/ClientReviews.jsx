@@ -282,7 +282,10 @@ const ClientReviews = () => {
         <div className="client-reviews-wrapper">
           <div className="client-review-content">
             <div className="client-review-img" ref={imageContainerRef}>
-              <img src={clientReviewsContent[activeClient].image} alt="" />
+              <img
+                src={clientReviewsContent[activeClient].image}
+                alt={clientReviewsContent[activeClient].imageAlt || ""}
+              />
             </div>
             <div className="client-review-copy">
               <h3 ref={reviewTextRef} key={activeClient}>
@@ -312,7 +315,7 @@ const ClientReviews = () => {
                 aria-pressed={index === visualClient}
               >
                 <div className="client-avatar">
-                  <img src={client.avatar} alt={client.name} />
+                  <img src={client.avatar} alt={client.avatarAlt} />
                 </div>
                 {index === visualClient && (
                   <div

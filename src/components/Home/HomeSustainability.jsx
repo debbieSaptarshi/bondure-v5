@@ -1,11 +1,19 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { Leaf } from "lucide-react";
+
 import { useLocale } from "@/components/LocaleProvider/LocaleProvider";
+import "@/app/products/scroll-demo/magic-bento.css";
 import "./HomePage.css";
+
+const SUSTAINABILITY_GLOW = "45, 90, 74";
 
 const sustainabilityCopy = {
   en: {
-    title: "Sustainability built to perform. Designed to use less.",
+    titleLead: "Sustainability",
+    titleTail: "built to perform. Designed to use less.",
     pillars: [
       ["Measure what matters", "We are building a clearer picture of product and operational impact so progress can be tracked and explained."],
       ["Make every mix count", "Reliable application helps reduce avoidable rework, material loss and premature replacement on working sites."],
@@ -13,7 +21,8 @@ const sustainabilityCopy = {
     ],
   },
   de: {
-    title: "Nachhaltigkeit, die Leistung bringt. Entwickelt für weniger Verbrauch.",
+    titleLead: "Nachhaltigkeit",
+    titleTail: "die Leistung bringt. Entwickelt für weniger Verbrauch.",
     pillars: [
       ["Messen, was zählt", "Wir schaffen ein klareres Bild der Auswirkungen von Produkten und Abläufen, damit Fortschritte verfolgt und erklärt werden können."],
       ["Jede Mischung zählt", "Eine zuverlässige Anwendung hilft, vermeidbare Nacharbeit, Materialverluste und vorzeitigen Austausch auf Baustellen zu reduzieren."],
@@ -22,18 +31,85 @@ const sustainabilityCopy = {
   },
 };
 
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing?.dataset.loaded === "true") {
+      resolve();
+      return;
+    }
+    if (existing) {
+      existing.addEventListener("load", () => resolve(), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = true;
+    script.addEventListener("load", () => {
+      script.dataset.loaded = "true";
+      resolve();
+    }, { once: true });
+    script.addEventListener("error", () => reject(new Error(`Failed to load ${src}`)), { once: true });
+    document.body.appendChild(script);
+  });
+}
+
 export default function HomeSustainability() {
   const { locale } = useLocale();
   const copy = sustainabilityCopy[locale];
+  const pillarsRef = useRef(null);
+  const cleanupRef = useRef(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function initEffects() {
+      window.gsap = gsap;
+      await loadScript("/products-scroll-demo/magic-bento.js");
+      if (cancelled) return;
+
+      const grid = pillarsRef.current;
+      if (!grid) return;
+
+      delete grid.dataset.magicBentoReady;
+      cleanupRef.current?.();
+      cleanupRef.current = window.initMagicBento?.(grid, {
+        cardSelector: ".home-sustainability__pillar",
+        glowColor: SUSTAINABILITY_GLOW,
+      }) || null;
+    }
+
+    initEffects().catch(console.error);
+
+    return () => {
+      cancelled = true;
+      cleanupRef.current?.();
+      cleanupRef.current = null;
+    };
+  }, []);
 
   return (
-    <section className="home-sustainability" aria-labelledby="sustainability-title">
+    <section
+      className="home-sustainability bento-section"
+      aria-labelledby="sustainability-title"
+      style={{
+        "--product-spec-glow": SUSTAINABILITY_GLOW,
+        "--product-spec-glow-shadow": "rgba(45, 90, 74, 0.22)",
+      }}
+    >
       <div className="home-sustainability__inner">
-        <div className="home-sustainability__intro">
-          <h2 id="sustainability-title">{copy.title}</h2>
+        <div className="home-sustainability__intro home-section-intro">
+          <h2 id="sustainability-title" className="home-section-heading">
+            <strong className="home-sustainability__title-lead">
+              <Leaf className="home-sustainability__title-icon" aria-hidden="true" strokeWidth={2.1} />
+              {copy.titleLead}
+            </strong>{" "}
+            {copy.titleTail}
+          </h2>
         </div>
 
-        <div className="home-sustainability__pillars">
+        <div className="home-sustainability__pillars" ref={pillarsRef}>
           <article className="home-sustainability__pillar home-sustainability__pillar--measure">
             <div className="home-sustainability__illustration home-sustainability__illustration--photo" aria-hidden="true">
               <img

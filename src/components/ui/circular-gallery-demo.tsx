@@ -6,43 +6,43 @@ import { useLocale } from "@/components/LocaleProvider/LocaleProvider";
 const projectSlides: Record<"en" | "de", CoverflowSlide[]> = {
   en: [
     {
-      src: "/home-media/solution-residential.webp",
-      alt: "Modern glass high-rise buildings viewed from below",
+      src: "/home-media/gallery-tile-installation.webp",
+      alt: "Bondure technician installing large-format wall tiles in a premium residential interior",
       title: "High-rise residential",
       description:
         "High-performance tile, stone and façade systems engineered for demanding high-rise construction conditions.",
     },
     {
-      src: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=900&auto=format&fit=crop&q=80",
-      alt: "Construction workers on a large active jobsite",
+      src: "/home-media/gallery-floor-screed.webp",
+      alt: "Worker levelling a polished floor screed in a sunlit architectural interior courtyard",
       title: "Infrastructure",
       description:
         "Durable repair mortars, grouts and protective coatings for high-traffic infrastructure and exposed structures.",
     },
     {
-      src: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=900&auto=format&fit=crop&q=80",
-      alt: "Bright contemporary hospital interior",
+      src: "/spotlight/services2floor.webp",
+      alt: "Large-format floor tiles installed in a clean, brightly lit healthcare interior",
       title: "Healthcare",
       description:
         "Hygienic, low-VOC adhesive and flooring systems for clean, durable, fast-ready healthcare spaces.",
     },
     {
-      src: "/home-media/solution-hospital.webp",
-      alt: "Resort hotel with balconies and a pool",
+      src: "/spotlight/tile-installation.webp",
+      alt: "Hotel bathroom and lobby finishes with precision tile installation",
       title: "Hospitality",
       description:
         "Premium finish solutions for hotels and resorts: consistent colour, reliable adhesion and surfaces that hold up to daily guest traffic.",
     },
     {
-      src: "/home-media/solution-restaurant.webp",
-      alt: "Modern retail interior with warm lighting",
+      src: "/services/experience-center.webp",
+      alt: "Bondure experience center interior showcasing tile, marble and wall finish displays",
       title: "Retail & restaurants",
       description:
         "Fast-track flooring and wall systems for shops, malls and dining spaces where appearance, slip resistance and programme speed are critical.",
     },
     {
-      src: "/home-media/solution-under-sea-road.webp",
-      alt: "Ocean waves breaking in deep blue water",
+      src: "/spotlight/services3AAC.webp",
+      alt: "Interior wall plaster and moisture-resistant finishes applied on site",
       title: "Marine",
       description:
         "Waterproofing and bonding systems built for docks, coastal structures and environments with constant moisture, salt and thermal movement.",
@@ -50,40 +50,46 @@ const projectSlides: Record<"en" | "de", CoverflowSlide[]> = {
   ],
   de: [
     {
-      src: "/home-media/solution-residential.webp",
-      alt: "Moderne gläserne Wohnhochhäuser von unten betrachtet",
+      src: "/home-media/gallery-tile-installation.webp",
+      alt: "Bondure Techniker verlegt großformatige Wandfliesen in einem hochwertigen Wohninterieur",
       title: "Wohnhochhäuser",
-      description: "Fliesen-, Naturstein- und Fassadensysteme für hohe Gebäude, die Windlasten, Verformungen und enge Bauzeitpläne bewältigen, ohne die Haftfestigkeit zu beeinträchtigen.",
+      description:
+        "Hochleistungs-Fliesen-, Naturstein- und Fassadensysteme für anspruchsvolle Hochhausbau-Bedingungen.",
     },
     {
-      src: "https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=900&auto=format&fit=crop&q=80",
-      alt: "Bauarbeiter auf einer großen aktiven Baustelle",
+      src: "/home-media/gallery-floor-screed.webp",
+      alt: "Arbeiter glättet einen Estrichboden in einem sonnigen architektonischen Innenhof",
       title: "Infrastruktur",
-      description: "Reparaturmörtel, Vergussmassen und Schutzbeschichtungen für Brücken, Straßen und Ingenieurbauwerke, die starker Belastung und dauerhafter Witterung standhalten müssen.",
+      description:
+        "Langlebige Reparaturmörtel, Vergussmassen und Schutzbeschichtungen für stark beanspruchte Infrastruktur und exponierte Bauwerke.",
     },
     {
-      src: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=900&auto=format&fit=crop&q=80",
-      alt: "Heller moderner Krankenhausinnenraum",
+      src: "/spotlight/services2floor.webp",
+      alt: "Großformatige Bodenfliesen in einem sauberen, hellen Gesundheitsinterieur",
       title: "Gesundheitswesen",
-      description: "Hygienische, emissionsarme Klebstoff- und Bodensysteme für Krankenhäuser und klinische Räume, in denen Sauberkeit, Haltbarkeit und schnelle Fertigstellung gleichermaßen zählen.",
+      description:
+        "Hygienische, emissionsarme Klebstoff- und Bodensysteme für saubere, langlebige und schnell nutzbare Gesundheitsräume.",
     },
     {
-      src: "/home-media/solution-hospital.webp",
-      alt: "Resorthotel mit Balkonen und Pool",
+      src: "/spotlight/tile-installation.webp",
+      alt: "Hotelbad und Lobby-Oberflächen mit präziser Fliesenverlegung",
       title: "Hotellerie",
-      description: "Premium-Lösungen für Hotels und Resorts mit gleichmäßiger Farbe, zuverlässiger Haftung und Oberflächen, die dem täglichen Gästebetrieb standhalten.",
+      description:
+        "Premium-Lösungen für Hotels und Resorts mit gleichmäßiger Farbe, zuverlässiger Haftung und Oberflächen, die dem täglichen Gästebetrieb standhalten.",
     },
     {
-      src: "/home-media/solution-restaurant.webp",
-      alt: "Moderner Einzelhandelsraum mit warmer Beleuchtung",
+      src: "/services/experience-center.webp",
+      alt: "Innenansicht des Bondure Erlebniszentrums mit Fliesen-, Marmor- und Wandfinish-Ausstellungen",
       title: "Einzelhandel & Gastronomie",
-      description: "Schnell ausführbare Boden- und Wandsysteme für Geschäfte, Einkaufszentren und Gastronomiebereiche, in denen Optik, Rutschhemmung und Baugeschwindigkeit entscheidend sind.",
+      description:
+        "Schnell ausführbare Boden- und Wandsysteme für Geschäfte, Einkaufszentren und Gastronomiebereiche, in denen Optik, Rutschhemmung und Baugeschwindigkeit entscheidend sind.",
     },
     {
-      src: "/home-media/solution-under-sea-road.webp",
-      alt: "Brechende Meereswellen in tiefblauem Wasser",
+      src: "/spotlight/services3AAC.webp",
+      alt: "Innenwandputz und feuchtigkeitsbeständige Oberflächen auf der Baustelle",
       title: "Maritimbereich",
-      description: "Abdichtungs- und Haftsysteme für Docks, Küstenbauwerke und Umgebungen mit ständiger Feuchtigkeit, Salz und thermischer Bewegung.",
+      description:
+        "Abdichtungs- und Haftsysteme für Docks, Küstenbauwerke und Umgebungen mit ständiger Feuchtigkeit, Salz und thermischer Bewegung.",
     },
   ],
 };
@@ -97,13 +103,18 @@ export default function CircularGalleryDemo() {
         slides={projectSlides[locale]}
         showNavigation
         showCaption
+        captionPlacement="overlay"
         loop
         label={locale === "de" ? "Bondure Projektgalerie" : "Bondure project gallery"}
         className="w-full"
-        cardWidth="clamp(168px, 24vw, 300px)"
-        frameClassName="pt-10 pb-4 sm:pt-14 sm:pb-6"
+        cardWidth="clamp(240px, 32vw, 380px)"
+        rotate={38}
+        depth={0.48}
+        gap={0.08}
+        frameClassName="coverflow-carousel__frame--solutions cursor-grab py-6 active:cursor-grabbing sm:py-8"
         captionClassName="home-solutions__carousel-caption"
-        navButtonClassName="p-3.5 shadow-md ring-1 ring-black/10 hover:bg-white sm:p-4"
+        cardClassName="home-solutions__carousel-card shadow-none"
+        navButtonClassName="p-3.5 ring-1 ring-black/10 hover:bg-white sm:p-4"
         navIconClassName="size-7 sm:size-8"
       />
     </div>
