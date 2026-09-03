@@ -128,6 +128,7 @@ export default function HomeStaticSections() {
               return (
               <article className="home-stat-card" key={`${value}-${label}`}>
                 <img src={illustration} alt="" loading="lazy" decoding="async" />
+                <span className="home-stat-card__spacer" aria-hidden="true" />
                 <StatCardHoverStrokes />
                 <strong>{value}</strong>
                 <p className="home-stat-card__label">{label}</p>

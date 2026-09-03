@@ -6,43 +6,43 @@ import { useLocale } from "@/components/LocaleProvider/LocaleProvider";
 const projectSlides: Record<"en" | "de", CoverflowSlide[]> = {
   en: [
     {
-      src: "/home-media/gallery-tile-installation.webp",
-      alt: "Bondure technician installing large-format wall tiles in a premium residential interior",
+      src: "/home-media/solution-residential.webp",
+      alt: "Modern glass high-rise buildings viewed from below",
       title: "High-rise residential",
       description:
         "High-performance tile, stone and façade systems engineered for demanding high-rise construction conditions.",
     },
     {
-      src: "/home-media/gallery-floor-screed.webp",
-      alt: "Worker levelling a polished floor screed in a sunlit architectural interior courtyard",
+      src: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=900&auto=format&fit=crop&q=80",
+      alt: "Modern open-plan office interior with natural light",
       title: "Infrastructure",
       description:
         "Durable repair mortars, grouts and protective coatings for high-traffic infrastructure and exposed structures.",
     },
     {
-      src: "/spotlight/services2floor.webp",
-      alt: "Large-format floor tiles installed in a clean, brightly lit healthcare interior",
+      src: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=900&auto=format&fit=crop&q=80",
+      alt: "Bright contemporary hospital interior",
       title: "Healthcare",
       description:
         "Hygienic, low-VOC adhesive and flooring systems for clean, durable, fast-ready healthcare spaces.",
     },
     {
-      src: "/spotlight/tile-installation.webp",
-      alt: "Hotel bathroom and lobby finishes with precision tile installation",
+      src: "/home-media/solution-hospitality-interior.webp",
+      alt: "Modern hotel bedroom interior with polished hardwood flooring",
       title: "Hospitality",
       description:
         "Premium finish solutions for hotels and resorts: consistent colour, reliable adhesion and surfaces that hold up to daily guest traffic.",
     },
     {
-      src: "/services/experience-center.webp",
-      alt: "Bondure experience center interior showcasing tile, marble and wall finish displays",
+      src: "/home-media/solution-restaurant.webp",
+      alt: "Modern retail interior with warm lighting",
       title: "Retail & restaurants",
       description:
         "Fast-track flooring and wall systems for shops, malls and dining spaces where appearance, slip resistance and programme speed are critical.",
     },
     {
-      src: "/spotlight/services3AAC.webp",
-      alt: "Interior wall plaster and moisture-resistant finishes applied on site",
+      src: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=900&auto=format&fit=crop&q=80",
+      alt: "Clean tiled swimming pool with crystal-clear blue water",
       title: "Marine",
       description:
         "Waterproofing and bonding systems built for docks, coastal structures and environments with constant moisture, salt and thermal movement.",
@@ -50,43 +50,43 @@ const projectSlides: Record<"en" | "de", CoverflowSlide[]> = {
   ],
   de: [
     {
-      src: "/home-media/gallery-tile-installation.webp",
-      alt: "Bondure Techniker verlegt großformatige Wandfliesen in einem hochwertigen Wohninterieur",
+      src: "/home-media/solution-residential.webp",
+      alt: "Moderne gläserne Wohnhochhäuser von unten betrachtet",
       title: "Wohnhochhäuser",
       description:
         "Hochleistungs-Fliesen-, Naturstein- und Fassadensysteme für anspruchsvolle Hochhausbau-Bedingungen.",
     },
     {
-      src: "/home-media/gallery-floor-screed.webp",
-      alt: "Arbeiter glättet einen Estrichboden in einem sonnigen architektonischen Innenhof",
+      src: "https://images.unsplash.com/photo-1497366216548-37526070297c?w=900&auto=format&fit=crop&q=80",
+      alt: "Moderner Open-Space-Bürobereich mit Tageslicht",
       title: "Infrastruktur",
       description:
         "Langlebige Reparaturmörtel, Vergussmassen und Schutzbeschichtungen für stark beanspruchte Infrastruktur und exponierte Bauwerke.",
     },
     {
-      src: "/spotlight/services2floor.webp",
-      alt: "Großformatige Bodenfliesen in einem sauberen, hellen Gesundheitsinterieur",
+      src: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=900&auto=format&fit=crop&q=80",
+      alt: "Heller moderner Krankenhausinnenraum",
       title: "Gesundheitswesen",
       description:
         "Hygienische, emissionsarme Klebstoff- und Bodensysteme für saubere, langlebige und schnell nutzbare Gesundheitsräume.",
     },
     {
-      src: "/spotlight/tile-installation.webp",
-      alt: "Hotelbad und Lobby-Oberflächen mit präziser Fliesenverlegung",
+      src: "/home-media/solution-hospitality-interior.webp",
+      alt: "Moderne Hotelzimmer-Innenansicht mit poliertem Holzboden",
       title: "Hotellerie",
       description:
         "Premium-Lösungen für Hotels und Resorts mit gleichmäßiger Farbe, zuverlässiger Haftung und Oberflächen, die dem täglichen Gästebetrieb standhalten.",
     },
     {
-      src: "/services/experience-center.webp",
-      alt: "Innenansicht des Bondure Erlebniszentrums mit Fliesen-, Marmor- und Wandfinish-Ausstellungen",
+      src: "/home-media/solution-restaurant.webp",
+      alt: "Moderner Einzelhandelsraum mit warmer Beleuchtung",
       title: "Einzelhandel & Gastronomie",
       description:
         "Schnell ausführbare Boden- und Wandsysteme für Geschäfte, Einkaufszentren und Gastronomiebereiche, in denen Optik, Rutschhemmung und Baugeschwindigkeit entscheidend sind.",
     },
     {
-      src: "/spotlight/services3AAC.webp",
-      alt: "Innenwandputz und feuchtigkeitsbeständige Oberflächen auf der Baustelle",
+      src: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=900&auto=format&fit=crop&q=80",
+      alt: "Sauberer gefliester Swimmingpool mit klarem blauem Wasser",
       title: "Maritimbereich",
       description:
         "Abdichtungs- und Haftsysteme für Docks, Küstenbauwerke und Umgebungen mit ständiger Feuchtigkeit, Salz und thermischer Bewegung.",

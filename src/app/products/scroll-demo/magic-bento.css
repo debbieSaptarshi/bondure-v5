@@ -333,7 +333,7 @@
     0 0 24px var(--glow-shadow);
 }
 
-.home-stats__grid.is-magic-bento .magic-bento-card--border-glow::after {
+.home-stats__grid.is-magic-bento .magic-bento-card--border-glow::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -397,5 +397,189 @@
   .home-stats__grid.is-magic-bento .magic-bento-card--border-glow:hover,
   .home-stats__grid.is-magic-bento .magic-bento-card--particles:hover {
     box-shadow: 15px 15px 30px #bebebe, -15px -15px 30px #ffffff;
+  }
+}
+
+/* R&D evidence cards */
+
+.rd-evidence-grid.is-magic-bento {
+  position: relative;
+  user-select: none;
+}
+
+.rd-evidence-grid.is-magic-bento .rd-evidence-card.magic-bento-card {
+  --glow-x: 50%;
+  --glow-y: 50%;
+  --glow-intensity: 0;
+  --glow-radius: 300px;
+  --glow-color: var(--product-spec-glow, 64, 19, 21);
+  --glow-shadow: var(--product-spec-glow-shadow, rgba(64, 19, 21, 0.22));
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.rd-evidence-grid.is-magic-bento .rd-evidence-card.magic-bento-card:hover {
+  border-color: #9a7f68;
+  box-shadow:
+    0 10px 28px rgba(64, 19, 21, 0.08),
+    0 0 24px var(--glow-shadow);
+}
+
+.rd-evidence-grid.is-magic-bento .magic-bento-card--border-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 6px;
+  background: radial-gradient(
+    var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.55)) 0%,
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.28)) 30%,
+    transparent 60%
+  );
+  border-radius: inherit;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.rd-evidence-grid.is-magic-bento .magic-bento-card--border-glow:hover {
+  box-shadow:
+    0 14px 36px rgba(64, 19, 21, 0.1),
+    0 0 30px var(--glow-shadow);
+}
+
+.rd-evidence-grid.is-magic-bento .magic-bento-card--particles:hover {
+  box-shadow:
+    0 10px 28px rgba(64, 19, 21, 0.08),
+    0 0 24px var(--glow-shadow);
+}
+
+.rd-evidence-grid.is-magic-bento .magic-bento__particle::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: rgba(var(--glow-color), 0.2);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.rd-evidence-grid.is-magic-bento .rd-evidence-card.magic-bento-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .rd-evidence-grid.is-magic-bento .rd-evidence-card.magic-bento-card {
+    will-change: auto;
+  }
+
+  .rd-evidence-grid.is-magic-bento .rd-evidence-card.magic-bento-card:hover,
+  .rd-evidence-grid.is-magic-bento .magic-bento-card--border-glow:hover,
+  .rd-evidence-grid.is-magic-bento .magic-bento-card--particles:hover {
+    box-shadow: none;
+  }
+}
+
+/* R&D people cards */
+
+.rd-people-grid.is-magic-bento {
+  position: relative;
+  user-select: none;
+}
+
+.rd-people-grid.is-magic-bento .rd-people-card.magic-bento-card {
+  --glow-x: 50%;
+  --glow-y: 50%;
+  --glow-intensity: 0;
+  --glow-radius: 300px;
+  --glow-color: var(--product-spec-glow, 89, 22, 24);
+  --glow-shadow: var(--product-spec-glow-shadow, rgba(89, 22, 24, 0.2));
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.rd-people-grid.is-magic-bento .rd-people-card.magic-bento-card:hover {
+  border-color: rgba(89, 22, 24, 0.22);
+  box-shadow:
+    0 12px 32px rgba(35, 27, 28, 0.08),
+    0 0 24px var(--glow-shadow);
+}
+
+.rd-people-grid.is-magic-bento .magic-bento-card--border-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 6px;
+  background: radial-gradient(
+    var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.55)) 0%,
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.28)) 30%,
+    transparent 60%
+  );
+  border-radius: inherit;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.rd-people-grid.is-magic-bento .magic-bento-card--border-glow:hover {
+  box-shadow:
+    0 16px 40px rgba(35, 27, 28, 0.1),
+    0 0 30px var(--glow-shadow);
+}
+
+.rd-people-grid.is-magic-bento .magic-bento-card--particles:hover {
+  box-shadow:
+    0 12px 32px rgba(35, 27, 28, 0.08),
+    0 0 24px var(--glow-shadow);
+}
+
+.rd-people-grid.is-magic-bento .magic-bento__particle::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: rgba(var(--glow-color), 0.2);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.rd-people-grid.is-magic-bento .rd-people-card.magic-bento-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .rd-people-grid.is-magic-bento .rd-people-card.magic-bento-card {
+    will-change: auto;
+  }
+
+  .rd-people-grid.is-magic-bento .rd-people-card.magic-bento-card:hover,
+  .rd-people-grid.is-magic-bento .magic-bento-card--border-glow:hover,
+  .rd-people-grid.is-magic-bento .magic-bento-card--particles:hover {
+    box-shadow: none;
   }
 }

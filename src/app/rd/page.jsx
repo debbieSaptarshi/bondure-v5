@@ -1,8 +1,9 @@
 "use client";
 
 import "./rd-page.css";
+import "@/app/products/scroll-demo/magic-bento.css";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -14,6 +15,43 @@ import Copy from "@/components/Copy/Copy";
 import { useLocale } from "@/components/LocaleProvider/LocaleProvider";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const RD_EVIDENCE_GLOW = "64, 19, 21";
+const RD_PEOPLE_GLOW = "89, 22, 24";
+
+function initBentoGrid(grid, cardSelector, glowColor) {
+  if (!grid) return null;
+  delete grid.dataset.magicBentoReady;
+  return window.initMagicBento?.(grid, {
+    cardSelector,
+    glowColor,
+    textAutoHide: false,
+  }) || null;
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing?.dataset.loaded === "true") {
+      resolve();
+      return;
+    }
+    if (existing) {
+      existing.addEventListener("load", () => resolve(), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = true;
+    script.addEventListener("load", () => {
+      script.dataset.loaded = "true";
+      resolve();
+    }, { once: true });
+    script.addEventListener("error", () => reject(new Error(`Failed to load ${src}`)), { once: true });
+    document.body.appendChild(script);
+  });
+}
 
 const copy = {
   en: {
@@ -33,19 +71,19 @@ const copy = {
       {
         title: "Materials research",
         description: "Formulation and chemistry.",
-        image: "/home-media/rd-materials-research-lab.jpg",
+        image: "/home-media/materials-research-lab.png",
         alt: "Bonding material powder sample prepared for laboratory analysis in a material testing lab",
       },
       {
         title: "Application engineering",
         description: "Application and substrates.",
-        image: "/home-media/rd-site-testing.jpg",
+        image: "/home-media/site-testing.webp",
         alt: "Technical specialist carrying out a construction-site test",
       },
       {
         title: "Independent verification",
         description: "Repeatable external testing.",
-        image: "/home-media/rd-independent-verification.jpg",
+        image: "/home-media/independent-verification-site.png",
         alt: "Technical team inspecting bonded block samples on a construction site",
       },
     ],
@@ -88,19 +126,19 @@ const copy = {
       {
         title: "Materialforschung",
         description: "Formulierung und Chemie.",
-        image: "/home-media/rd-materials-research-lab.jpg",
+        image: "/home-media/materials-research-lab.png",
         alt: "Pulverprobe eines Verbindungsmaterials in einem Materialprüflabor",
       },
       {
         title: "Anwendungstechnik",
         description: "Anwendung und Untergründe.",
-        image: "/home-media/rd-site-testing.jpg",
+        image: "/home-media/site-testing.webp",
         alt: "Technischer Spezialist bei einer Prüfung auf der Baustelle",
       },
       {
         title: "Unabhängige Verifizierung",
         description: "Reproduzierbare externe Prüfungen.",
-        image: "/home-media/rd-independent-verification.jpg",
+        image: "/home-media/independent-verification-site.png",
         alt: "Technisches Team prüft verklebte Blockproben auf einer Baustelle",
       },
     ],
@@ -132,6 +170,33 @@ export default function RDPage() {
   const { locale } = useLocale();
   const content = copy[locale];
   const pageRef = useRef(null);
+  const peopleGridRef = useRef(null);
+  const evidenceGridRef = useRef(null);
+  const bentoCleanupRef = useRef([]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function initRdBento() {
+      window.gsap = gsap;
+      await loadScript("/products-scroll-demo/magic-bento.js");
+      if (cancelled) return;
+
+      bentoCleanupRef.current.forEach((cleanup) => cleanup?.());
+      bentoCleanupRef.current = [
+        initBentoGrid(peopleGridRef.current, ".rd-people-card", RD_PEOPLE_GLOW),
+        initBentoGrid(evidenceGridRef.current, ".rd-evidence-card", RD_EVIDENCE_GLOW),
+      ].filter(Boolean);
+    }
+
+    initRdBento().catch(console.error);
+
+    return () => {
+      cancelled = true;
+      bentoCleanupRef.current.forEach((cleanup) => cleanup?.());
+      bentoCleanupRef.current = [];
+    };
+  }, []);
 
   useGSAP(() => {
     const media = gsap.matchMedia();
@@ -186,15 +251,21 @@ export default function RDPage() {
           </div>
         </section>
 
-        <section className="rd-people">
+        <section
+          className="rd-people bento-section"
+          style={{
+            "--product-spec-glow": RD_PEOPLE_GLOW,
+            "--product-spec-glow-shadow": "rgba(89, 22, 24, 0.2)",
+          }}
+        >
           <div className="container">
             <Copy delay={0.1}>
               <h2>{content.peopleHeading}</h2>
               <p>{content.peopleDescription}</p>
             </Copy>
-            <div className="rd-people-grid">
+            <div className="rd-people-grid" ref={peopleGridRef}>
               {content.researchRoles.map((role) => (
-                <article key={role.title}>
+                <article className="rd-people-card" key={role.title}>
                   <div><img src={role.image} alt={role.alt} /></div>
                   <h3>{role.title}</h3>
                   <p>{role.description}</p>
@@ -240,7 +311,13 @@ export default function RDPage() {
           </div>
         </section>
 
-        <section className="rd-evidence">
+        <section
+          className="rd-evidence bento-section"
+          style={{
+            "--product-spec-glow": RD_EVIDENCE_GLOW,
+            "--product-spec-glow-shadow": "rgba(64, 19, 21, 0.22)",
+          }}
+        >
           <div className="container">
             <div className="rd-evidence-heading">
               <Copy delay={0.1}>
@@ -248,9 +325,9 @@ export default function RDPage() {
                 <p>{content.evidenceDescription}</p>
               </Copy>
             </div>
-            <div className="rd-evidence-grid">
+            <div className="rd-evidence-grid" ref={evidenceGridRef}>
               {content.evidenceRecords.map(([title, description, image]) => (
-                <article key={title}>
+                <article className="rd-evidence-card" key={title}>
                   <div><img src={image} alt="" /></div>
                   <h3>{title}</h3>
                   <p>{description}</p>
@@ -263,6 +340,7 @@ export default function RDPage() {
         <CTAWindow
           img="/media/rd-closing-mortar-application.png"
           header={content.ctaHeading}
+          showOverlay={false}
         />
       </main>
       <ConditionalFooter />

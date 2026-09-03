@@ -8,75 +8,71 @@ import "./HomePage.css";
 const galleryMedia = [
   {
     id: "concrete-mixer",
-    src: "/services/experience-center.webp",
+    src: "/optimized/home/gallery-mixing-video.webp",
+    staticSrc: "/optimized/home/gallery-mixing-video-poster.webp",
     alt: {
-      en: "Bondure material experience center with hands-on application demonstrations",
-      de: "Bondure Material-Erlebniszentrum mit praxisnahen Anwendungsvorführungen",
+      en: "Construction site with workers and concrete mixer outdoors",
+      de: "Baustelle mit Arbeitern und Betonmischer im Freien",
     },
-    imageOnly: true,
   },
   {
     id: "floor-screed",
-    src: "/home-media/site-image-6.webp",
+    src: "/spotlight/services2floor.webp",
     alt: {
-      en: "Worker smoothing a floor coating in a sunlit courtyard",
-      de: "Arbeiter glättet eine Bodenbeschichtung in einem sonnigen Innenhof",
+      en: "Floor screed application on a construction site",
+      de: "Estrichauftrag auf einer Baustelle",
     },
-    imageOnly: true,
   },
   {
-    id: "material-inspection",
-    src: "/home-media/material-inspection.webp",
+    id: "excavator",
+    src: "/optimized/home/gallery-luss-test.webp",
+    staticSrc: "/optimized/home/gallery-luss-test-poster.webp",
     alt: {
-      en: "Bondure specialist inspecting materials and substrate quality on site",
-      de: "Bondure-Spezialist prüft Material und Untergrundqualität vor Ort",
+      en: "Excavator loading earth into a dump truck at a construction site",
+      de: "Bagger lädt Erde auf einer Baustelle in einen Muldenkipper",
     },
-    imageOnly: true,
   },
   {
     id: "bondure-tile-installation",
-    src: "/home-media/site-image-9.webp",
+    src: "/spotlight/tile-installation.webp",
     alt: {
-      en: "Bondure technician installing tiles on site with a mountain view through the window",
-      de: "Bondure Techniker verlegt Fliesen auf der Baustelle mit Bergblick durch das Fenster",
+      en: "Precision tile installation in progress",
+      de: "Präzise Fliesenverlegung im Einsatz",
     },
-    imageOnly: true,
   },
   {
     id: "tile-adhesive",
-    src: "/media/product-catalog-tile-adhesive.webp",
+    src: "/optimized/home/gallery-water-proofing.webp",
+    staticSrc: "/optimized/home/gallery-water-proofing-poster.webp",
     alt: {
-      en: "Bondure tile adhesive product recommended for project requirements",
-      de: "Bondure Fliesenkleber-Produkt, empfohlen für die Projektanforderungen",
+      en: "Tile adhesive being applied with a notched trowel",
+      de: "Fliesenkleber wird mit einer Zahnkelle aufgetragen",
     },
-    imageOnly: true,
   },
   {
     id: "wall-plaster",
-    src: "/home-media/site-image-5.webp",
+    src: "/spotlight/services3AAC.webp",
     alt: {
-      en: "Wall plaster application on site",
-      de: "Auftragen von Wandputz auf der Baustelle",
+      en: "AAC block masonry and jointing work on site",
+      de: "Mauerwerk und Verfugung mit Porenbetonsteinen vor Ort",
     },
-    imageOnly: true,
   },
   {
     id: "aac-blocks",
-    src: "/optimized/home/gallery-aac-joining.webp",
+    src: "/optimized/home/gallery-aac-block.webp",
+    staticSrc: "/optimized/home/gallery-aac-block-poster.webp",
     alt: {
       en: "AAC block joining mortar applied on site",
       de: "Auf der Baustelle aufgetragener Porenbeton-Fugenmörtel",
     },
-    imageOnly: true,
   },
   {
     id: "precision-tile",
-    src: "/home-media/site-image-7.webp",
+    src: "/spotlight/spotlight-img-2.webp",
     alt: {
       en: "Large-format tile installation with a notched trowel",
       de: "Verlegung großformatiger Fliesen mit einer Zahnkelle",
     },
-    imageOnly: true,
   },
 ];
 
@@ -91,104 +87,35 @@ function restartMarqueeAnimation(node) {
   node.style.animation = "";
 }
 
-function GalleryItem({ item, loadVideo = true }) {
-  const rootRef = useRef(null);
-  const videoRef = useRef(null);
-  const [shouldLoadVideo, setShouldLoadVideo] = useState(false);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
+function resolveMediaSrc(item) {
+  if (!item.staticSrc || typeof window === "undefined") return item.src;
+
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const saveData = navigator.connection?.saveData;
+  return reducedMotion || saveData ? item.staticSrc : item.src;
+}
+
+function GalleryItem({ item }) {
+  const [mediaSrc, setMediaSrc] = useState(item.src);
 
   useEffect(() => {
-    const root = rootRef.current;
-    if (!root || !loadVideo || item.imageOnly) return;
+    setMediaSrc(resolveMediaSrc(item));
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const saveData = navigator.connection?.saveData;
-    if (reducedMotion || saveData) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setShouldLoadVideo(entry.isIntersecting);
-
-        if (!entry.isIntersecting) {
-          setIsVideoPlaying(false);
-          videoRef.current?.pause();
-        }
-      },
-      { rootMargin: "120px" },
-    );
-
-    observer.observe(root);
-    return () => observer.disconnect();
-  }, [item.imageOnly, loadVideo]);
-
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !shouldLoadVideo) return;
-
-    const handlePlaying = () => setIsVideoPlaying(true);
-    const handlePause = () => setIsVideoPlaying(false);
-
-    const tryPlay = async () => {
-      try {
-        video.muted = true;
-        await video.play();
-      } catch {
-        setIsVideoPlaying(false);
-      }
-    };
-
-    video.addEventListener("playing", handlePlaying);
-    video.addEventListener("pause", handlePause);
-    video.addEventListener("canplay", tryPlay);
-
-    if (video.readyState >= HTMLMediaElement.HAVE_FUTURE_DATA) {
-      void tryPlay();
-    }
-
-    return () => {
-      video.removeEventListener("playing", handlePlaying);
-      video.removeEventListener("pause", handlePause);
-      video.removeEventListener("canplay", tryPlay);
-    };
-  }, [shouldLoadVideo]);
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const updateSrc = () => setMediaSrc(resolveMediaSrc(item));
+    motionQuery.addEventListener("change", updateSrc);
+    return () => motionQuery.removeEventListener("change", updateSrc);
+  }, [item.src, item.staticSrc]);
 
   return (
-    <figure
-      className={`home-gallery__slide${isVideoPlaying ? " is-video-playing" : ""}`}
-      ref={rootRef}
-    >
-      {item.imageOnly ? (
-        <img
-          className="home-gallery__media home-gallery__poster"
-          src={item.src}
-          alt={item.alt}
-          loading="lazy"
-          decoding="async"
-        />
-      ) : (
-        <>
-          <img
-            className="home-gallery__media home-gallery__poster"
-            src={item.poster}
-            alt={item.alt}
-            loading="lazy"
-            decoding="async"
-          />
-          {shouldLoadVideo && loadVideo ? (
-            <video
-              ref={videoRef}
-              className="home-gallery__media home-gallery__video"
-              src={item.src}
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              aria-label={item.alt}
-            />
-          ) : null}
-        </>
-      )}
+    <figure className="home-gallery__slide">
+      <img
+        className="home-gallery__media home-gallery__poster"
+        src={mediaSrc}
+        alt={item.alt}
+        loading="lazy"
+        decoding="async"
+      />
     </figure>
   );
 }
@@ -243,7 +170,6 @@ export default function HomeGallery() {
                 <GalleryItem
                   item={{ ...item, alt: item.alt[locale] }}
                   key={`${setIndex}-${item.id}`}
-                  loadVideo={setIndex === 0}
                 />
               ))}
             </div>

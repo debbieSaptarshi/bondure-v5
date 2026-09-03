@@ -60,6 +60,52 @@ const videos = [
   ["home-media/h40-video-background-cropped.mp4", 960],
 ];
 
+// Homepage MP4 -> animated WebP (+ static poster) for public/optimized/home/
+const homepageAnimatedWebp = [
+  {
+    input: "home-media/home_page_intro.mp4",
+    output: "optimized/home/home-page-intro.webp",
+    poster: "optimized/home/home-page-intro-poster.webp",
+    width: 1120,
+    fps: 10,
+    quality: 68,
+    trim: 8,
+  },
+  {
+    input: "home-media/mixingvideo.mp4",
+    output: "optimized/home/gallery-mixing-video.webp",
+    poster: "optimized/home/gallery-mixing-video-poster.webp",
+    width: 960,
+    fps: 12,
+    quality: 76,
+  },
+  {
+    input: "home-media/luss-test.mp4",
+    output: "optimized/home/gallery-luss-test.webp",
+    poster: "optimized/home/gallery-luss-test-poster.webp",
+    width: 900,
+    fps: 15,
+    quality: 78,
+  },
+  {
+    input: "home-media/water-proofing.mp4",
+    output: "optimized/home/gallery-water-proofing.webp",
+    poster: "optimized/home/gallery-water-proofing-poster.webp",
+    width: 900,
+    fps: 15,
+    quality: 78,
+  },
+  {
+    input: "home-media/aac-block.mp4",
+    output: "optimized/home/gallery-aac-block.webp",
+    poster: "optimized/home/gallery-aac-block-poster.webp",
+    width: 800,
+    fps: 10,
+    quality: 70,
+    trim: 6,
+  },
+];
+
 async function preserveOriginal(relativePath) {
   const source = join(publicDir, relativePath);
   const backup = join(backupDir, relativePath);
@@ -111,7 +157,53 @@ async function optimizeVideo([relativePath, maxWidth]) {
   console.log(`${relativePath} re-encoded`);
 }
 
-if (!process.argv.includes("--videos-only")) {
-  for (const image of images) await optimizeImage(image);
+async function convertHomepageVideoToWebp({
+  input,
+  output,
+  poster,
+  width,
+  fps,
+  quality,
+  trim,
+}) {
+  const inputPath = join(publicDir, input);
+  const outputPath = join(publicDir, output);
+  const posterPath = join(publicDir, poster);
+  await mkdir(dirname(outputPath), { recursive: true });
+
+  const animatedArgs = ["-y"];
+  if (trim) animatedArgs.push("-t", String(trim));
+  animatedArgs.push(
+    "-i", inputPath,
+    "-an",
+    "-vf", `fps=${fps},scale=${width}:-2:flags=lanczos`,
+    "-c:v", "libwebp",
+    "-quality", String(quality),
+    "-loop", "0",
+    outputPath,
+  );
+  await runFfmpeg(animatedArgs);
+
+  await runFfmpeg([
+    "-y",
+    "-i", inputPath,
+    "-vf", `scale=${width}:-2:flags=lanczos`,
+    "-frames:v", "1",
+    "-c:v", "libwebp",
+    "-quality", "82",
+    posterPath,
+  ]);
+
+  console.log(`${input} -> ${output} (+ poster)`);
 }
-for (const video of videos) await optimizeVideo(video);
+
+if (process.argv.includes("--homepage-webp")) {
+  for (const entry of homepageAnimatedWebp) {
+    await convertHomepageVideoToWebp(entry);
+  }
+} else {
+  if (!process.argv.includes("--videos-only")) {
+    for (const image of images) await optimizeImage(image);
+  }
+  for (const video of videos) await optimizeVideo(video);
+}

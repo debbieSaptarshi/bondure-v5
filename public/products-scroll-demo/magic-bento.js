@@ -31,8 +31,8 @@
 
   function updateCardGlowProperties(card, mouseX, mouseY, glow, radius) {
     const rect = card.getBoundingClientRect();
-    const relativeX = ((mouseX - rect.left) / rect.width) * 100;
-    const relativeY = ((mouseY - rect.top) / rect.height) * 100;
+    const relativeX = Math.min(100, Math.max(0, ((mouseX - rect.left) / rect.width) * 100));
+    const relativeY = Math.min(100, Math.max(0, ((mouseY - rect.top) / rect.height) * 100));
 
     card.style.setProperty("--glow-x", `${relativeX}%`);
     card.style.setProperty("--glow-y", `${relativeY}%`);

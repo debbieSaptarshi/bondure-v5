@@ -131,7 +131,7 @@ export default function ServicesPage() {
           </div>
           <div className="container service-pillars-list">
             {content.pillars.map((pillar) => (
-              <article className="service-pillar" key={pillar.key}>
+              <article className="service-pillar" key={pillar.key} tabIndex={0}>
                 <div className="service-pillar-visual"><PillarIllustration type={pillar.key} /></div>
                 <h3>{pillar.title}</h3>
                 <p>{pillar.description}</p>

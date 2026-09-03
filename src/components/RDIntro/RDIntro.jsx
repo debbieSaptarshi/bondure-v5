@@ -32,7 +32,7 @@ const DEFAULT_GALLERY_ITEMS = [
 
 export const RD_GALLERY_ITEMS = DEFAULT_GALLERY_ITEMS.map((item, index) => (
   index === 4
-    ? { ...item, poster: "/home-media/rd-product-and-rd.jpg" }
+    ? { ...item, poster: "/home-media/rd-product-and-rd.png" }
     : item
 ));
 

@@ -5,9 +5,8 @@ import "./ServiceImageTower.css";
 import { useEffect, useRef, useState } from "react";
 import { useLocale } from "../LocaleProvider/LocaleProvider";
 import { serviceImageTowerSlides } from "@/lib/service-image-tower-data";
-import { telescopeSpotlightMedia } from "@/lib/telescope-spotlight-data";
 
-const images = telescopeSpotlightMedia.map((item) => item.image);
+const images = serviceImageTowerSlides.map((item) => item.image);
 
 const vertexShader = `
   varying vec2 vUv;
@@ -48,8 +47,8 @@ const config = {
   endRadius: 3.5,
   tileHeightRatio: 1.1,
   tileSegments: 24,
-  spiralGap: 0.35,
-  tileOverlap: 0.005,
+  spiralGap: 0,
+  tileOverlap: 0.04,
   cameraZ: 12,
 };
 
