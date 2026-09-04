@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useLenis } from "lenis/react";
+import gsap from "gsap";
 
 import { useViewTransition } from "@/hooks/useViewTransition";
 import { useLocale } from "@/components/LocaleProvider/LocaleProvider";
@@ -23,7 +24,34 @@ import {
   screedBags,
 } from "@/lib/tools-data";
 
+import "@/app/products/scroll-demo/magic-bento.css";
 import "./Tools.css";
+
+const TOOLS_GLOW = "89, 22, 24";
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing?.dataset.loaded === "true") {
+      resolve();
+      return;
+    }
+    if (existing) {
+      existing.addEventListener("load", () => resolve(), { once: true });
+      return;
+    }
+
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = true;
+    script.addEventListener("load", () => {
+      script.dataset.loaded = "true";
+      resolve();
+    }, { once: true });
+    script.addEventListener("error", () => reject(new Error(`Failed to load ${src}`)), { once: true });
+    document.body.appendChild(script);
+  });
+}
 
 const CALCULATORS = {
   adhesive: {
@@ -704,6 +732,8 @@ export default function ToolsPage() {
   const lenis = useLenis();
   const [activeTool, setActiveTool] = useState(null);
   const tools = useMemo(() => getLocalizedTools(locale), [locale]);
+  const toolsGridRef = useRef(null);
+  const bentoCleanupRef = useRef(null);
 
   const openTool = (id) => {
     const next = getTool(id) ? id : null;
@@ -721,10 +751,48 @@ export default function ToolsPage() {
     return () => window.removeEventListener("hashchange", sync);
   }, []);
 
+  useEffect(() => {
+    if (activeTool) return undefined;
+
+    let cancelled = false;
+
+    async function initToolsBento() {
+      window.gsap = gsap;
+      await loadScript("/products-scroll-demo/magic-bento.js");
+      if (cancelled) return;
+
+      const grid = toolsGridRef.current;
+      if (!grid) return;
+
+      delete grid.dataset.magicBentoReady;
+      bentoCleanupRef.current?.();
+      bentoCleanupRef.current = window.initMagicBento?.(grid, {
+        cardSelector: ".tools-card",
+        glowColor: TOOLS_GLOW,
+        textAutoHide: false,
+      }) || null;
+    }
+
+    initToolsBento().catch(console.error);
+
+    return () => {
+      cancelled = true;
+      bentoCleanupRef.current?.();
+      bentoCleanupRef.current = null;
+    };
+  }, [activeTool]);
+
   return (
     <main className="tools-page">
       {!activeTool && (
-        <section className="tools-hub" aria-labelledby="tools-hub-title">
+        <section
+          className="tools-hub bento-section"
+          aria-labelledby="tools-hub-title"
+          style={{
+            "--product-spec-glow": TOOLS_GLOW,
+            "--product-spec-glow-shadow": "rgba(89, 22, 24, 0.2)",
+          }}
+        >
           <div className="tools-hub__inner">
             <h1 id="tools-hub-title" className="tools-hub__title">
               {localize(locale, "Site tools for every Bondure line")}
@@ -732,7 +800,7 @@ export default function ToolsPage() {
             <p className="tools-hub__copy">
               {localize(locale, "Coverage and yield estimators for tile adhesive, AAC joining, grout, floor screed, plaster, and tile cleaner — plus a product recommender for site-ready picks.")}
             </p>
-            <div className="tools-hub__grid">
+            <div className="tools-hub__grid" ref={toolsGridRef}>
               {tools.map((tool) => (
                 <button
                   key={tool.id}

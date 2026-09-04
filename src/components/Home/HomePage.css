@@ -311,7 +311,18 @@
 .home-sustainability {
   overflow: hidden;
   padding: clamp(4.5rem, 9vw, 8rem) clamp(1.25rem, 4vw, 3rem);
-  background: linear-gradient(180deg, #dcefd4 0%, #eef8ea 42%, var(--base-500) 100%);
+  background: linear-gradient(
+    180deg,
+    #ffffff 0%,
+    #fafdf8 10%,
+    #eef8ea 24%,
+    #e4f3dc 38%,
+    #dcefd4 50%,
+    #e4f3dc 62%,
+    #eef8ea 76%,
+    #f5f3ee 88%,
+    var(--base-500) 100%
+  );
   color: #1a332b;
 }
 
@@ -722,10 +733,7 @@ html[data-theme="dark"] .home-standards__title { color: #f2ede6; }
     line-height: 1.15;
   }
   .home-sustainability__pillar p {
-    margin-top: 0.5rem;
-    font-size: clamp(0.58rem, 2.2vw, 0.72rem);
-    line-height: 1.4;
-    max-width: none;
+    display: none;
   }
   .home-solutions__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 2.5rem; }
 }

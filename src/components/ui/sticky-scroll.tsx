@@ -17,12 +17,52 @@ type StickyTestimonial = {
 
 const stickyTestimonials: StickyTestimonial[] = [
   {
+    id: 7,
+    name: 'Sophie Wagner',
+    role: 'Interior Architect, Munich',
+    quote:
+      'On our hospital refurbishment in Bavaria, Bondure mortars gave us predictable open time and clean edges — even in cold morning conditions on the slab.',
+    image: '/clients/sticky-scroll/sophie-wagner.jpg',
+    alt: 'Sophie Wagner in a site interview',
+    cutout: true,
+  },
+  {
+    id: 4,
+    name: 'Emily Carter',
+    role: 'Architect, Berlin',
+    quote:
+      'We used Bondure across a mixed-use tower — AAC joining, screed and tile work. Performance stayed consistent from basement to rooftop.',
+    image: '/clients/sticky-scroll/emily-carter.jpg',
+    alt: 'Emily Carter in a site interview',
+    cutout: true,
+  },
+  {
+    id: 5,
+    name: 'David Schmidt',
+    role: 'Architect, Cologne',
+    quote:
+      'We switched to Bondure for AAC block joining and tile adhesive work. Coverage improved, rework dropped, and the technical team was on call whenever we needed them.',
+    image: '/clients/sticky-scroll/david-schmidt.jpg',
+    alt: 'David Schmidt, technical lead',
+    cutout: true,
+  },
+  {
+    id: 10,
+    name: 'Helena Weiss',
+    role: 'Architect, Frankfurt',
+    quote:
+      'For high-traffic healthcare interiors we needed systems that balance hygiene, durability and speed. Bondure delivered on all three without compromise.',
+    image: '/clients/sticky-scroll/helena-weiss.jpg',
+    alt: 'Helena Weiss in a professional interview setting',
+    cutout: true,
+  },
+  {
     id: 1,
     name: 'Ramesh Kumar',
     role: 'Bauarbeiter, Mumbai',
     quote:
       'Bondure systems hold up under real monsoon conditions. Substrate prep, open time, and final bond strength have stayed consistent across every tower we have used them on.',
-    image: '/clients/sticky-scroll/ramesh-kumar.png',
+    image: '/clients/sticky-scroll/ramesh-kumar.jpg',
     alt: 'Ramesh Kumar, Bauarbeiter',
     cutout: true,
   },
@@ -32,8 +72,9 @@ const stickyTestimonials: StickyTestimonial[] = [
     role: 'General Contractor, Hamburg',
     quote:
       'What I appreciate is how clearly each system is documented. Substrate prep, consumption rates and curing — it all translates cleanly to site.',
-    image: '/clients/sticky-scroll/micheal-baur.png',
+    image: '/clients/sticky-scroll/micheal-baur.jpg',
     alt: 'Micheal Baur in a professional interview setting',
+    cutout: true,
   },
   {
     id: 3,
@@ -41,27 +82,8 @@ const stickyTestimonials: StickyTestimonial[] = [
     role: 'Bauarbeiter, Hamburg',
     quote:
       'What stood out was how predictable the mixes are on site. The crew gets the same workability batch after batch, which keeps our finishing schedule tight.',
-    image: '/clients/sticky-scroll/lukas-mayer.png',
+    image: '/clients/sticky-scroll/lukas-mayer.jpg',
     alt: 'Lukas Mayer, project manager',
-    cutout: true,
-  },
-  {
-    id: 4,
-    name: 'Emily Carter',
-    role: 'Architect, Berlin',
-    quote:
-      'We used Bondure across a mixed-use tower — AAC joining, screed and tile work. Performance stayed consistent from basement to rooftop.',
-    image: '/clients/sticky-scroll/emily-carter.png',
-    alt: 'Emily Carter in a site interview',
-  },
-  {
-    id: 5,
-    name: 'David Schmidt',
-    role: 'Architect, Cologne',
-    quote:
-      'We switched to Bondure for AAC block joining and tile adhesive work. Coverage improved, rework dropped, and the technical team was on call whenever we needed them.',
-    image: '/clients/sticky-scroll/david-schmidt.png',
-    alt: 'David Schmidt, technical lead',
     cutout: true,
   },
   {
@@ -70,17 +92,9 @@ const stickyTestimonials: StickyTestimonial[] = [
     role: 'Architect, Frankfurt',
     quote:
       'For high-traffic healthcare interiors we needed systems that balance hygiene, durability and speed. Bondure delivered on all three without compromise.',
-    image: '/clients/sticky-scroll/anna-keller.png',
+    image: '/clients/sticky-scroll/anna-keller.jpg',
     alt: 'Anna Keller in a professional interview setting',
-  },
-  {
-    id: 7,
-    name: 'Sophie Wagner',
-    role: 'Interior Architect, Munich',
-    quote:
-      'On our hospital refurbishment in Bavaria, Bondure mortars gave us predictable open time and clean edges — even in cold morning conditions on the slab.',
-    image: '/clients/sticky-scroll/sophie-wagner.png',
-    alt: 'Sophie Wagner in a site interview',
+    cutout: true,
   },
   {
     id: 8,
@@ -88,8 +102,9 @@ const stickyTestimonials: StickyTestimonial[] = [
     role: 'Bauarbeiter, Accra',
     quote:
       'The tile adhesive coverage was right first time. Our crew spent less time re-mixing and more time laying — that alone kept the programme on track.',
-    image: '/clients/sticky-scroll/thomas-weber.png',
+    image: '/clients/sticky-scroll/thomas-weber.jpg',
     alt: 'Thomas Weber, project lead',
+    cutout: true,
   },
   {
     id: 9,
@@ -97,26 +112,27 @@ const stickyTestimonials: StickyTestimonial[] = [
     role: 'Architect, Bremen',
     quote:
       'Reliable batch-to-batch consistency meant fewer callbacks on finishing. The technical team answered spec questions before they became site issues.',
-    image: '/clients/sticky-scroll/alexander-schmitt.png',
+    image: '/clients/sticky-scroll/alexander-schmitt.jpg',
     alt: 'Alexander Schmitt, developer',
+    cutout: true,
+  },
+  {
+    id: 11,
+    name: 'Arjun Mehta',
+    role: 'Site Engineer, Mumbai',
+    quote:
+      'Bondure systems hold up under real monsoon conditions. Substrate prep, open time, and final bond strength have stayed consistent across every tower we have used them on.',
+    image: '/clients/sticky-scroll/arjun-mehta.jpg',
+    alt: 'Arjun Mehta, site engineer',
+    cutout: true,
   },
 ];
 
 const stickyTestimonialsDe = [
   {
-    role: 'Bauingenieur, Mumbai',
-    quote: 'Bondure Systeme bewähren sich unter realen Monsunbedingungen. Untergrundvorbereitung, offene Zeit und endgültige Haftfestigkeit blieben bei jedem Hochhaus, in dem wir sie eingesetzt haben, konstant.',
-    alt: 'Arjun Mehta, Bauingenieur',
-  },
-  {
-    role: 'Planerin, Hamburg',
-    quote: 'Ich schätze besonders, wie klar jedes System dokumentiert ist. Untergrundvorbereitung, Verbrauchsmengen und Aushärtung lassen sich allesamt eindeutig auf die Baustelle übertragen.',
-    alt: 'Lena Schmidt in einer professionellen Interviewsituation',
-  },
-  {
-    role: 'Projektleiterin, Bengaluru',
-    quote: 'Besonders aufgefallen ist uns, wie berechenbar die Mischungen auf der Baustelle sind. Das Team erhält Charge für Charge dieselbe Verarbeitbarkeit, wodurch unser Fertigstellungsplan eingehalten wird.',
-    alt: 'Priya Desai, Projektleiterin',
+    role: 'Bauleiter, München',
+    quote: 'Bei unserer Krankenhaussanierung in Bayern boten Bondure Mörtel eine berechenbare offene Zeit und saubere Kanten, selbst bei kalten Bedingungen am Morgen auf der Bodenplatte.',
+    alt: 'Markus Hoffmann bei einem Bürointerview',
   },
   {
     role: 'Bauunternehmer, Berlin',
@@ -134,9 +150,24 @@ const stickyTestimonialsDe = [
     alt: 'Helena Weiss leitet ein Interview zur Projektbesprechung',
   },
   {
-    role: 'Bauleiter, München',
-    quote: 'Bei unserer Krankenhaussanierung in Bayern boten Bondure Mörtel eine berechenbare offene Zeit und saubere Kanten, selbst bei kalten Bedingungen am Morgen auf der Bodenplatte.',
-    alt: 'Markus Hoffmann bei einem Bürointerview',
+    role: 'Bauingenieur, Mumbai',
+    quote: 'Bondure Systeme bewähren sich unter realen Monsunbedingungen. Untergrundvorbereitung, offene Zeit und endgültige Haftfestigkeit blieben bei jedem Hochhaus, in dem wir sie eingesetzt haben, konstant.',
+    alt: 'Arjun Mehta, Bauingenieur',
+  },
+  {
+    role: 'Planerin, Hamburg',
+    quote: 'Ich schätze besonders, wie klar jedes System dokumentiert ist. Untergrundvorbereitung, Verbrauchsmengen und Aushärtung lassen sich allesamt eindeutig auf die Baustelle übertragen.',
+    alt: 'Lena Schmidt in einer professionellen Interviewsituation',
+  },
+  {
+    role: 'Projektleiterin, Bengaluru',
+    quote: 'Besonders aufgefallen ist uns, wie berechenbar die Mischungen auf der Baustelle sind. Das Team erhält Charge für Charge dieselbe Verarbeitbarkeit, wodurch unser Fertigstellungsplan eingehalten wird.',
+    alt: 'Priya Desai, Projektleiterin',
+  },
+  {
+    role: 'Architektin, Frankfurt',
+    quote: 'Für stark frequentierte Innenräume im Gesundheitswesen brauchten wir Systeme, die Hygiene, Haltbarkeit und Geschwindigkeit vereinen. Bondure erfüllte alle drei Anforderungen ohne Kompromisse.',
+    alt: 'Helena Weiss leitet ein Interview zur Projektbesprechung',
   },
   {
     role: 'Projektleiter, Accra',
@@ -147,6 +178,11 @@ const stickyTestimonialsDe = [
     role: 'Projektentwicklerin, London',
     quote: 'Die zuverlässige Konstanz von Charge zu Charge bedeutete weniger Nachbesserungen beim Ausbau. Das Technikteam beantwortete Spezifikationsfragen, bevor sie auf der Baustelle zum Problem wurden.',
     alt: 'Amara Osei, Projektentwicklerin',
+  },
+  {
+    role: 'Bauingenieur, Mumbai',
+    quote: 'Bondure Systeme bewähren sich unter realen Monsunbedingungen. Untergrundvorbereitung, offene Zeit und endgültige Haftfestigkeit blieben bei jedem Hochhaus, in dem wir sie eingesetzt haben, konstant.',
+    alt: 'Arjun Mehta, Bauingenieur',
   },
 ];
 
@@ -218,9 +254,9 @@ const StickyScroll = forwardRef<HTMLElement>((props, ref) => {
   const testimonials = locale === 'de'
     ? stickyTestimonials.map((testimonial, index) => ({ ...testimonial, ...stickyTestimonialsDe[index] }))
     : stickyTestimonials;
-  const leftTestimonials = testimonials.slice(0, 3);
-  const centerTestimonials = testimonials.slice(3, 6);
-  const rightTestimonials = testimonials.slice(6, 9);
+  const leftTestimonials = testimonials.slice(0, 4);
+  const centerTestimonials = testimonials.slice(4, 7);
+  const rightTestimonials = testimonials.slice(7, 11);
 
   return (
     <section

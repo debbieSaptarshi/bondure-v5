@@ -583,3 +583,95 @@
     box-shadow: none;
   }
 }
+
+/* Tools hub cards */
+
+.tools-hub__grid.is-magic-bento {
+  position: relative;
+  user-select: none;
+}
+
+.tools-hub__grid.is-magic-bento .tools-card.magic-bento-card {
+  --glow-x: 50%;
+  --glow-y: 50%;
+  --glow-intensity: 0;
+  --glow-radius: 300px;
+  --glow-color: var(--product-spec-glow, 89, 22, 24);
+  --glow-shadow: var(--product-spec-glow-shadow, rgba(89, 22, 24, 0.2));
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.tools-hub__grid.is-magic-bento .tools-card.magic-bento-card:hover {
+  border-color: rgba(89, 22, 24, 0.22);
+  box-shadow:
+    0 12px 32px rgba(26, 10, 14, 0.08),
+    0 0 24px var(--glow-shadow);
+}
+
+.tools-hub__grid.is-magic-bento .magic-bento-card--border-glow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 6px;
+  background: radial-gradient(
+    var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.55)) 0%,
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.28)) 30%,
+    transparent 60%
+  );
+  border-radius: inherit;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+
+.tools-hub__grid.is-magic-bento .magic-bento-card--border-glow:hover {
+  box-shadow:
+    0 16px 40px rgba(26, 10, 14, 0.1),
+    0 0 30px var(--glow-shadow);
+}
+
+.tools-hub__grid.is-magic-bento .magic-bento-card--particles:hover {
+  box-shadow:
+    0 12px 32px rgba(26, 10, 14, 0.08),
+    0 0 24px var(--glow-shadow);
+}
+
+.tools-hub__grid.is-magic-bento .magic-bento__particle::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  background: rgba(var(--glow-color), 0.2);
+  border-radius: 50%;
+  z-index: -1;
+}
+
+.tools-hub__grid.is-magic-bento .tools-card.magic-bento-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .tools-hub__grid.is-magic-bento .tools-card.magic-bento-card {
+    will-change: auto;
+  }
+
+  .tools-hub__grid.is-magic-bento .tools-card.magic-bento-card:hover,
+  .tools-hub__grid.is-magic-bento .magic-bento-card--border-glow:hover,
+  .tools-hub__grid.is-magic-bento .magic-bento-card--particles:hover {
+    box-shadow: none;
+  }
+}

@@ -103,6 +103,10 @@
   border-color: rgba(26, 10, 14, 0.22);
 }
 
+.tools-hub__grid.is-magic-bento .tools-card:hover {
+  transform: none;
+}
+
 .tools-card__title {
   margin: 0 0 0.55rem;
   font-size: 1.22rem;
