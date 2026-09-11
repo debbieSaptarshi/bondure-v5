@@ -444,10 +444,10 @@ const DEMO_VIDEO = {
 
 const SECONDARY_VIEW_BY_CATEGORY = {
   "aac-joining": "/products/aac-blocks.webp",
-  "tile-adhesive": "/spotlight/tile-adhesive-application.png",
+  "tile-adhesive": "",
   "floor-screed": "/products/screed-full.webp",
   "plaster": "/products/wall-stark-1.webp",
-  "tile-cleaner": "/home-media/site-testing.webp",
+  "tile-cleaner": "",
 };
 
 function normalizeView(view, fallback, index) {
@@ -480,10 +480,9 @@ export function getProductViews(product) {
     return product.views.map((view, index) => normalizeView(view, base, index));
   }
 
-  const secondarySrc =
-    SECONDARY_VIEW_BY_CATEGORY[product.category] || "/home-media/site-testing.webp";
+  const secondarySrc = SECONDARY_VIEW_BY_CATEGORY[product.category] || null;
 
-  return [
+  const views = [
     {
       type: "image",
       src: base.src,
@@ -491,18 +490,26 @@ export function getProductViews(product) {
       poster: base.src,
       mediaFit: "contain",
     },
-    {
+  ];
+
+  if (product.slug === "bondure-aac-block-jointing-mortar") {
+    views.push({
       ...DEMO_VIDEO,
       mediaFit: "cover",
-    },
-    {
+    });
+  }
+
+  if (secondarySrc) {
+    views.push({
       type: "image",
       src: secondarySrc,
       alt: `${base.alt} — on site`,
       poster: secondarySrc,
       mediaFit: "cover",
-    },
-  ];
+    });
+  }
+
+  return views;
 }
 
 export function getProductBySlug(slug) {
